@@ -1,0 +1,127 @@
+---
+export interface StackItem {
+  name: string;
+  logo: string;
+}
+
+export interface StackFeatured {
+  name: string;
+  logo?: string;
+  logos?: StackItem[];
+}
+
+export interface StackGroup {
+  label: string;
+  items: StackItem[];
+}
+
+interface Props {
+  featured: [StackFeatured, StackFeatured];
+  groups: StackGroup[];
+}
+
+const { featured, groups } = Astro.props;
+const [laravel, frontends] = featured;
+---
+
+<div class="stack-cloud mx-auto w-full max-w-[340px] text-center sm:max-w-[380px]">
+  <p class="mb-5 text-[11px] font-medium uppercase tracking-[0.2em] text-white/40">
+    Built for Laravel teams
+  </p>
+
+  <div class="mb-6 flex items-stretch justify-center gap-3 sm:gap-4">
+    <div class="stack-cloud__featured flex min-w-0 flex-1 flex-col items-center gap-2.5 rounded-2xl bg-white/95 px-4 py-4 shadow-lg shadow-spin-900/15 ring-1 ring-black/5 sm:px-5 sm:py-5">
+      <div class="flex h-14 w-full items-center justify-center sm:h-16">
+        <img
+          src={laravel.logo}
+          alt={laravel.name}
+          class="max-h-14 max-w-[4.5rem] object-contain sm:max-h-16 sm:max-w-20"
+          width="64"
+          height="64"
+          loading="lazy"
+          draggable="false"
+        />
+      </div>
+      <span class="text-sm font-semibold text-spin-900/80">{laravel.name}</span>
+    </div>
+
+    <div class="flex shrink-0 items-center px-0.5">
+      <span class="text-sm font-light text-white/25">+</span>
+    </div>
+
+    <div class="stack-cloud__featured stack-cloud__featured--alt flex min-w-0 flex-1 flex-col items-center gap-2.5 rounded-2xl bg-white/95 px-4 py-4 shadow-lg shadow-spin-900/15 ring-1 ring-black/5 sm:px-5 sm:py-5">
+      <div class="flex h-14 w-full items-center justify-center gap-2 sm:h-16 sm:gap-3">
+        {frontends.logos?.map((logo) => (
+          <img
+            src={logo.logo}
+            alt={logo.name}
+            class="h-10 w-10 object-contain sm:h-11 sm:w-11"
+            width="44"
+            height="44"
+            loading="lazy"
+            draggable="false"
+            title={logo.name}
+          />
+        ))}
+      </div>
+      <span class="text-sm font-semibold text-spin-900/80">{frontends.name}</span>
+    </div>
+  </div>
+
+  <div class="mx-6 mb-6 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent"></div>
+
+  <div class="flex flex-col gap-5">
+    {groups.map((group) => (
+      <div>
+        <p class="mb-2.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/30">
+          {group.label}
+        </p>
+        <div class="flex flex-wrap justify-center gap-2 sm:gap-2.5">
+          {group.items.map((item) => (
+            <div
+              class="stack-cloud__tile flex h-11 w-11 items-center justify-center rounded-xl bg-white/95 p-2.5 shadow-md shadow-spin-900/10 ring-1 ring-black/5 transition-all duration-300 hover:scale-105 hover:shadow-lg sm:h-12 sm:w-12 sm:rounded-2xl"
+              title={item.name}
+            >
+              <img
+                src={item.logo}
+                alt={item.name}
+                class="h-full w-full object-contain"
+                width="32"
+                height="32"
+                loading="lazy"
+                draggable="false"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .stack-cloud__featured {
+    animation: stack-tile-drift 5.5s ease-in-out infinite;
+  }
+
+  .stack-cloud__featured--alt {
+    animation-delay: 0.4s;
+  }
+
+  .stack-cloud__tile {
+    animation: stack-tile-drift 5s ease-in-out infinite;
+  }
+
+  .stack-cloud__tile:nth-child(2n) {
+    animation-delay: 0.25s;
+  }
+
+  @keyframes stack-tile-drift {
+    0%, 100% {
+      translate: 0 0;
+    }
+    50% {
+      translate: 0 -3px;
+    }
+  }
+</style>

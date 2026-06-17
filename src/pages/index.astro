@@ -1,85 +1,124 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import StackCloud from "../components/StackCloud.astro";
 import release from "../data/release.json";
 
 const features = [
   {
     icon: "scan",
-    title: "Smart project scanning",
+    title: "Laravel project scanning",
     description:
-      "Drop in a Laravel or JavaScript project folder. SpinApp detects your stack — PHP version, Node, database drivers, queue workers — and configures everything automatically.",
+      "Point SpinApp at your Laravel repo. It reads composer.json, detects PHP version, queue drivers, and whether you ship a Vue or React frontend.",
   },
   {
     icon: "docker",
-    title: "Docker without the YAML",
+    title: "Full stack, zero Compose",
     description:
-      "No hand-written Compose files. SpinApp builds and manages containers for your app, database, cache, queue, and web server — named, isolated, and reproducible.",
+      "App, database, Redis, queue worker, and web server — SpinApp wires up the containers Laravel needs without hand-written docker-compose.yml files.",
   },
   {
     icon: "db",
-    title: "Database provisioning",
+    title: "Migrations-ready databases",
     description:
-      "PostgreSQL, MySQL, MariaDB, or SQLite — pick your engine and SpinApp creates the database, runs migrations, and wires up credentials for you.",
+      "PostgreSQL, MySQL, MariaDB, or SQLite — provisioned and connected before you run artisan migrate. Credentials land in your .env automatically.",
   },
   {
     icon: "dashboard",
-    title: "One-click environment control",
+    title: "artisan at your fingertips",
     description:
-      "Start, stop, and restart your entire stack from a clean dashboard. Every service status at a glance, no terminal juggling required.",
+      "Start, stop, and restart your Laravel environment from one dashboard. Queue workers and schedulers included — no terminal tab juggling.",
   },
   {
     icon: "terminal",
-    title: "Built-in console",
+    title: "Built-in Laravel console",
     description:
-      "Run artisan, npm, and SQL queries directly against your containers. No context-switching between terminals and Docker exec.",
+      "Run artisan, npm run dev, and SQL against your DB container without leaving the app. Perfect for migrations, seeders, and tinker.",
   },
   {
     icon: "profile",
-    title: "HTTP & SQL profiling",
+    title: "SPX & SQL profiling",
     description:
-      "Built-in SPX profiling for Laravel with SQL query logging. Find bottlenecks before they reach production.",
+      "Built-in SPX profiling with SQL query logging for Laravel. Spot N+1 queries and slow endpoints before they ship.",
   },
   {
     icon: "expose",
-    title: "Cloudflare tunnel exposure",
+    title: "Share via Cloudflare tunnel",
     description:
-      "Share your local environment with teammates or clients via a secure Cloudflare tunnel — no ngrok config needed.",
+      "Expose your local Laravel app to teammates or clients with a secure Cloudflare tunnel — handy for Inertia demos and PR reviews.",
   },
   {
-    icon: "ide",
-    title: "IDE integration",
+    icon: "hosts",
+    title: "*.local domains",
     description:
-      "Open your project in VS Code, Cursor, or PhpStorm with one click. Local *.local domains managed in /etc/hosts automatically.",
+      "SpinApp manages /etc/hosts so your app lives at my-app.local — the way Laravel local dev should feel.",
   },
 ];
 
 const steps = [
   {
     num: "01",
-    title: "Pick your project",
-    description: "Select any Laravel or JavaScript project folder on your machine.",
+    title: "Open your Laravel app",
+    description: "Select a Laravel project — monolith or API with a Vue/React frontend in the same repo.",
   },
   {
     num: "02",
-    title: "Configure once",
-    description: "Walk through the setup wizard — PHP, Node, database, cache, queue, web server.",
+    title: "Run the setup wizard",
+    description: "Choose PHP version, database, Redis, queue driver, and how to serve your frontend assets.",
   },
   {
     num: "03",
-    title: "Spin it up",
-    description: "Hit start. Containers launch, the database provisions, and you're developing.",
+    title: "artisan migrate & go",
+    description: "Hit start. Containers launch, the DB provisions, and you're at my-app.local with npm run dev ready.",
   },
 ];
 
-const stacks = [
-  "Laravel",
-  "Vue / React",
-  "PostgreSQL",
-  "MySQL",
-  "Redis",
-  "RabbitMQ",
-  "Docker",
-  "Colima",
+const stackFeatured = [
+  { name: "Laravel", logo: "/logos/laravel.svg" },
+  {
+    name: "Frontends",
+    logos: [
+      { name: "Vue.js", logo: "/logos/vue.svg" },
+      { name: "React", logo: "/logos/react.svg" },
+    ],
+  },
+] ;
+
+const stackGroups = [
+  {
+    label: "PHP & tooling",
+    items: [
+      { name: "PHP", logo: "/logos/php.svg" },
+      { name: "Node.js", logo: "/logos/node.svg" },
+      { name: "npm", logo: "/logos/npm.svg" },
+    ],
+  },
+  {
+    label: "Databases",
+    items: [
+      { name: "PostgreSQL", logo: "/logos/postgresql.svg" },
+      { name: "MySQL", logo: "/logos/mysql.svg" },
+      { name: "MariaDB", logo: "/logos/mariadb.svg" },
+      { name: "SQLite", logo: "/logos/sqlite.svg" },
+    ],
+  },
+  {
+    label: "Cache & queues",
+    items: [
+      { name: "Redis", logo: "/logos/redis.svg" },
+      { name: "Valkey", logo: "/logos/valkey.svg" },
+      { name: "RabbitMQ", logo: "/logos/rabbitmq.svg" },
+    ],
+  },
+  {
+    label: "Infrastructure",
+    items: [
+      { name: "Docker", logo: "/logos/docker.svg" },
+      { name: "Colima", logo: "/logos/colima.svg" },
+      { name: "nginx", logo: "/logos/nginx.svg" },
+      { name: "Caddy", logo: "/logos/caddy.svg" },
+      { name: "Cloudflare", logo: "/logos/cloudflare.svg" },
+    ],
+  },
 ];
 ---
 
@@ -120,18 +159,19 @@ const stacks = [
       <div class="flex-1 text-center lg:text-left">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full glass text-xs font-medium text-spin-200 mb-6">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-          v{release.version} — macOS ready
+          v{release.version} — Laravel &amp; frontends
         </div>
 
         <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight mb-6">
-          <span class="text-gradient">Local dev environments,</span>
+          <span class="text-gradient">Laravel local dev,</span>
           <br />
           spun up in seconds
         </h1>
 
         <p class="text-lg sm:text-xl text-white/65 max-w-xl mx-auto lg:mx-0 leading-relaxed mb-10">
-          Pick a project folder. SpinApp scans your Laravel or JavaScript stack, creates Docker containers,
-          provisions the database, and runs your environment — no hand-written Compose files.
+          Pick your Laravel app — with or without a Vue/React frontend. SpinApp scans the stack,
+          provisions the database, starts queue workers, and serves everything at <span class="text-white/80">*.local</span>.
+          No docker-compose.yml required.
         </p>
 
         <div class="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
@@ -156,16 +196,11 @@ const stacks = [
         </p>
       </div>
 
-      <div class="flex-1 flex justify-center lg:justify-end">
-        <div class="relative animate-float">
+      <div class="flex w-full flex-1 justify-center lg:justify-end">
+        <div class="relative mx-auto animate-float lg:mx-0">
           <div class="absolute inset-0 rounded-3xl bg-spin-400/20 blur-3xl scale-110"></div>
-          <div class="relative glass-strong rounded-3xl p-8 sm:p-10 shadow-2xl shadow-spin-900/50">
-            <img src="/spinapp-icon.svg" alt="SpinApp" class="w-48 h-48 sm:w-56 sm:h-56 rounded-[22%] shadow-2xl shadow-spin-500/40" width="224" height="224" />
-            <div class="mt-6 flex flex-wrap gap-2 justify-center">
-              {stacks.map((s) => (
-                <span class="px-3 py-1 rounded-full text-xs font-medium bg-white/8 text-white/70 border border-white/10">{s}</span>
-              ))}
-            </div>
+          <div class="relative glass-strong rounded-3xl px-5 py-6 shadow-2xl shadow-spin-900/50 sm:px-7 sm:py-8">
+            <StackCloud featured={stackFeatured} groups={stackGroups} />
           </div>
         </div>
       </div>
@@ -176,20 +211,20 @@ const stacks = [
   <section class="relative z-10 border-y border-white/8 bg-white/[0.02]">
     <div class="max-w-6xl mx-auto px-6 py-8 grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
       <div>
-        <div class="text-2xl sm:text-3xl font-bold text-gradient">0 YAML</div>
-        <div class="text-sm text-white/45 mt-1">Compose files to write</div>
+        <div class="text-2xl sm:text-3xl font-bold text-gradient">artisan</div>
+        <div class="text-sm text-white/45 mt-1">Built into the console</div>
       </div>
       <div>
-        <div class="text-2xl sm:text-3xl font-bold text-gradient">4 DBs</div>
-        <div class="text-sm text-white/45 mt-1">PostgreSQL, MySQL, MariaDB, SQLite</div>
+        <div class="text-2xl sm:text-3xl font-bold text-gradient">SPX</div>
+        <div class="text-sm text-white/45 mt-1">HTTP &amp; SQL profiling</div>
       </div>
       <div>
-        <div class="text-2xl sm:text-3xl font-bold text-gradient">1 click</div>
-        <div class="text-sm text-white/45 mt-1">Start your entire stack</div>
+        <div class="text-2xl sm:text-3xl font-bold text-gradient">Queues</div>
+        <div class="text-sm text-white/45 mt-1">Redis, Valkey &amp; RabbitMQ</div>
       </div>
       <div>
-        <div class="text-2xl sm:text-3xl font-bold text-gradient">Native</div>
-        <div class="text-sm text-white/45 mt-1">Tauri desktop app</div>
+        <div class="text-2xl sm:text-3xl font-bold text-gradient">Vue + React</div>
+        <div class="text-sm text-white/45 mt-1">Frontend dev alongside Laravel</div>
       </div>
     </div>
   </section>
@@ -198,11 +233,11 @@ const stacks = [
   <section id="features" class="relative z-10 max-w-6xl mx-auto px-6 py-24 sm:py-32">
     <div class="text-center mb-16">
       <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
-        Everything you need to <span class="text-gradient">develop locally</span>
+        Everything a <span class="text-gradient">Laravel developer</span> needs locally
       </h2>
       <p class="text-white/55 max-w-2xl mx-auto text-lg">
-        SpinApp replaces the patchwork of Docker Compose, database scripts, hosts files, and tunnel tools
-        with one polished desktop experience.
+        From first clone to running migrations, queues, and a hot-reloading frontend —
+        SpinApp replaces the usual Docker + hosts + tunnel setup with one app.
       </p>
     </div>
 
@@ -231,8 +266,8 @@ const stacks = [
             {f.icon === "expose" && (
               <svg class="w-5 h-5 text-spin-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418"/></svg>
             )}
-            {f.icon === "ide" && (
-              <svg class="w-5 h-5 text-spin-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"/></svg>
+            {f.icon === "hosts" && (
+              <svg class="w-5 h-5 text-spin-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.75 9.75 0 100-19.5 9.75 9.75 0 000 19.5z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12h19.5M12 2.25c2.9 3.1 4.5 6.6 4.5 9.75S14.9 18.65 12 21.75 7.5 15.1 7.5 12 9.1 5.35 12 2.25z"/></svg>
             )}
           </div>
           <h3 class="font-semibold text-white mb-2">{f.title}</h3>
@@ -247,10 +282,10 @@ const stacks = [
     <div class="max-w-6xl mx-auto px-6 py-24 sm:py-32">
       <div class="text-center mb-16">
         <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
-          From folder to <span class="text-gradient">running app</span> in three steps
+          From <span class="text-gradient">composer install</span> to my-app.local
         </h2>
         <p class="text-white/55 max-w-xl mx-auto text-lg">
-          No DevOps degree required. SpinApp handles the infrastructure so you can focus on code.
+          Three steps. No DevOps rabbit holes. Just your Laravel app running the way it should.
         </p>
       </div>
 
@@ -279,29 +314,29 @@ const stacks = [
       <div class="relative grid lg:grid-cols-2 gap-10 items-center">
         <div>
           <h2 class="text-2xl sm:text-3xl font-bold tracking-tight mb-4">
-            Built for developers who ship
+            Laravel-first, frontend-ready
           </h2>
           <p class="text-white/55 leading-relaxed mb-6">
-            SpinApp is a native desktop app built with Tauri and Rust — fast, lightweight, and private.
-            Your projects stay on your machine. Docker containers are namespaced per project.
-            Redis, Valkey, RabbitMQ — all configurable from the setup wizard.
+            SpinApp is built around how Laravel teams actually work — PHP-FPM in Docker, Redis for cache
+            and sessions, a queue worker container, and npm run dev for your Inertia or API frontend.
+            Native macOS app, private by default, fast to launch.
           </p>
           <ul class="space-y-3 text-sm text-white/60">
             <li class="flex items-start gap-3">
               <svg class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              Auto/manual setup wizard for PHP, Node, database, cache &amp; queue
+              Setup wizard for PHP version, database, cache, queue &amp; web server
             </li>
             <li class="flex items-start gap-3">
               <svg class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              Works with Docker Desktop or Colima — SpinApp can help you get started
+              Vue &amp; React frontends detected and served alongside your Laravel app
             </li>
             <li class="flex items-start gap-3">
               <svg class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              Local *.local domains with automatic /etc/hosts management
+              Automatic *.local domains — no manual /etc/hosts editing
             </li>
             <li class="flex items-start gap-3">
               <svg class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              SPX profiling patches applied safely with automatic backups
+              SPX profiling with safe backups of bootstrap/app.php
             </li>
           </ul>
         </div>
@@ -323,7 +358,11 @@ const stacks = [
             <br />
             <span class="text-emerald-400">$</span> artisan migrate --seed<br />
             <span class="text-white/40">→ Running in container…</span><br />
-            <span class="text-emerald-400">✓</span> <span class="text-white/70">Migration complete</span>
+            <span class="text-emerald-400">✓</span> <span class="text-white/70">Migration complete</span><br />
+            <br />
+            <span class="text-emerald-400">$</span> npm run dev<br />
+            <span class="text-white/40">→ Vite dev server starting…</span><br />
+            <span class="text-emerald-400">✓</span> <span class="text-white/70">Frontend ready at :5173</span>
           </div>
         </div>
       </div>
@@ -334,10 +373,10 @@ const stacks = [
   <section class="relative z-10 border-t border-white/8">
     <div class="max-w-3xl mx-auto px-6 py-24 text-center">
       <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
-        Ready to spin up?
+        Ready to spin up Laravel?
       </h2>
       <p class="text-white/55 text-lg mb-10">
-        Download SpinApp for macOS and go from zero to running environment in minutes.
+        Download SpinApp for macOS — from zero to artisan migrate in minutes.
       </p>
       <a
         href={release.downloadUrl}
@@ -354,15 +393,21 @@ const stacks = [
 
   <!-- Footer -->
   <footer class="relative z-10 border-t border-white/8 bg-black/20">
-    <div class="max-w-6xl mx-auto px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-3">
-        <img src="/spinapp-icon.svg" alt="" class="w-8 h-8 rounded-[22%]" width="32" height="32" />
-        <span class="text-sm text-white/40">SpinApp — MIT License</span>
+    <div class="max-w-6xl mx-auto px-6 py-10 flex flex-col gap-6">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <img src="/spinapp-icon.svg" alt="" class="w-8 h-8 rounded-[22%]" width="32" height="32" />
+          <span class="text-sm text-white/40">SpinApp — MIT License</span>
+        </div>
+        <div class="flex items-center gap-6 text-sm text-white/40">
+          <a href={release.githubUrl} class="hover:text-white/70 transition-colors">GitHub</a>
+          <a href={release.downloadUrl} class="hover:text-white/70 transition-colors">Download</a>
+        </div>
       </div>
-      <div class="flex items-center gap-6 text-sm text-white/40">
-        <a href={release.githubUrl} class="hover:text-white/70 transition-colors">GitHub</a>
-        <a href={release.downloadUrl} class="hover:text-white/70 transition-colors">Download</a>
-      </div>
+      <p class="text-center text-[11px] leading-relaxed text-white/25 sm:text-left">
+        Third-party logos indicate supported technologies only; all trademarks belong to their respective owners.
+        Icon glyphs via <a href="https://simpleicons.org" class="underline underline-offset-2 hover:text-white/40">Simple Icons</a> (CC0).
+      </p>
     </div>
   </footer>
 </Layout>
