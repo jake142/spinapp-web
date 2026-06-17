@@ -1,12 +1,11 @@
-import { readdirSync, statSync, writeFileSync, mkdirSync } from "node:fs";
+import { copyFileSync, readdirSync, statSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const releaseDir = resolve(__dirname, "../../spinapp/release");
+const downloadsDir = resolve(__dirname, "../public/downloads");
 const outFile = resolve(__dirname, "../src/data/release.json");
-
-const GITHUB_REPO = "jake142/spinapp";
 
 function parseDmg(filename) {
   const match = filename.match(/^SpinApp_(\d+\.\d+\.\d+)_(aarch64|x64)\.dmg$/);
@@ -30,13 +29,12 @@ try {
   for (const file of files) {
     const parsed = parseDmg(file);
     if (!parsed) continue;
-    const mtime = statSync(join(releaseDir, file)).mtimeMs;
     if (!latest || compareVersions(parsed.version, latest.version) > 0) {
-      latest = { ...parsed, mtime };
+      latest = { ...parsed, sourcePath: join(releaseDir, file) };
     }
   }
 } catch {
-  // release folder missing — use package.json fallback
+  // release folder missing — keep existing public/downloads file
 }
 
 if (!latest) {
@@ -47,15 +45,22 @@ if (!latest) {
   };
 }
 
+mkdirSync(downloadsDir, { recursive: true });
+
+if (latest.sourcePath) {
+  const dest = join(downloadsDir, latest.filename);
+  copyFileSync(latest.sourcePath, dest);
+  console.log(`Copied DMG → public/downloads/${latest.filename}`);
+}
+
 const data = {
   version: latest.version,
   arch: latest.arch,
   filename: latest.filename,
-  downloadUrl: `https://github.com/${GITHUB_REPO}/releases/download/v${latest.version}/${latest.filename}`,
-  releasesUrl: `https://github.com/${GITHUB_REPO}/releases`,
-  githubUrl: `https://github.com/${GITHUB_REPO}`,
+  downloadUrl: `/downloads/${latest.filename}`,
+  githubUrl: "https://github.com/jake142/spinapp-web",
 };
 
 mkdirSync(dirname(outFile), { recursive: true });
 writeFileSync(outFile, JSON.stringify(data, null, 2) + "\n");
-console.log(`Release synced: v${data.version} → ${data.filename}`);
+console.log(`Release synced: v${data.version} → ${data.downloadUrl}`);

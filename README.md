@@ -17,7 +17,7 @@ npm run build
 npm run preview
 ```
 
-The download link is synced from the latest `.dmg` in `../spinapp/release/` before each dev/build.
+The download link is synced from the latest `.dmg` in `../spinapp/release/` and copied to `public/downloads/` before each dev/build.
 
 ## Deploy
 
