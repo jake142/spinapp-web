@@ -1,4 +1,4 @@
-import { copyFileSync, readdirSync, statSync, writeFileSync, mkdirSync } from "node:fs";
+import { copyFileSync, existsSync, readdirSync, readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -22,33 +22,63 @@ function compareVersions(a, b) {
   return 0;
 }
 
-let latest = null;
-
-try {
-  const files = readdirSync(releaseDir).filter((f) => f.endsWith(".dmg"));
+function latestFromDir(dir, withSourcePath = false) {
+  let latest = null;
+  const files = readdirSync(dir).filter((f) => f.endsWith(".dmg"));
   for (const file of files) {
     const parsed = parseDmg(file);
     if (!parsed) continue;
+    const entry = withSourcePath
+      ? { ...parsed, sourcePath: join(dir, file) }
+      : { ...parsed, sourcePath: join(dir, file) };
     if (!latest || compareVersions(parsed.version, latest.version) > 0) {
-      latest = { ...parsed, sourcePath: join(releaseDir, file) };
+      latest = entry;
     }
   }
+  return latest;
+}
+
+let latest = null;
+
+try {
+  latest = latestFromDir(releaseDir, true);
 } catch {
-  // release folder missing — keep existing public/downloads file
+  // spinapp/release missing — fall back to committed public/downloads
 }
 
 if (!latest) {
-  latest = {
-    version: "0.1.2",
-    arch: "aarch64",
-    filename: "SpinApp_0.1.2_aarch64.dmg",
-  };
+  try {
+    latest = latestFromDir(downloadsDir, true);
+  } catch {
+    // downloads dir missing
+  }
+}
+
+if (!latest && existsSync(outFile)) {
+  try {
+    const existing = JSON.parse(readFileSync(outFile, "utf8"));
+    if (existing.filename && existsSync(join(downloadsDir, existing.filename))) {
+      latest = {
+        version: existing.version,
+        arch: existing.arch,
+        filename: existing.filename,
+        sourcePath: join(downloadsDir, existing.filename),
+      };
+    }
+  } catch {
+    // keep going
+  }
+}
+
+if (!latest) {
+  console.error("No release DMG found in spinapp/release or public/downloads.");
+  process.exit(1);
 }
 
 mkdirSync(downloadsDir, { recursive: true });
 
-if (latest.sourcePath) {
-  const dest = join(downloadsDir, latest.filename);
+const dest = join(downloadsDir, latest.filename);
+if (latest.sourcePath && latest.sourcePath !== dest) {
   copyFileSync(latest.sourcePath, dest);
   console.log(`Copied DMG → public/downloads/${latest.filename}`);
 }
