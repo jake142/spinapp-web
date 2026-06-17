@@ -20,7 +20,7 @@ const features = [
     icon: "db",
     title: "Migrations-ready databases",
     description:
-      "PostgreSQL, MySQL, MariaDB, or SQLite — provisioned and connected before you run artisan migrate. Credentials land in your .env automatically.",
+      "PostgreSQL with pgvector, MySQL, MariaDB, or SQLite — provisioned and connected before you run artisan migrate. Credentials land in your .env automatically.",
   },
   {
     icon: "dashboard",
@@ -174,25 +174,25 @@ const stackGroups = [
           No docker-compose.yml required.
         </p>
 
-        <div class="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 justify-center lg:justify-start">
           <a
             href={release.downloadUrl}
-            class="group inline-flex items-center gap-3 px-8 py-4 rounded-2xl font-semibold text-spin-950 bg-gradient-to-r from-white via-spin-100 to-spin-200 hover:from-spin-50 hover:to-white transition-all shadow-xl shadow-spin-500/25 hover:shadow-spin-400/40 hover:scale-[1.02] active:scale-[0.98]"
+            class="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-semibold text-spin-950 bg-gradient-to-r from-white via-spin-100 to-spin-200 hover:from-spin-50 hover:to-white transition-all shadow-xl shadow-spin-500/25 hover:shadow-spin-400/40 hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap"
           >
-            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
             Download for macOS
-            <span class="text-xs font-normal text-spin-700/70 bg-spin-200/50 px-2 py-0.5 rounded-full">v{release.version}</span>
+            <span class="text-xs font-normal text-spin-700/70 bg-spin-200/50 px-2 py-0.5 rounded-full leading-none">v{release.version}</span>
           </a>
 
           <div
-            class="inline-flex items-center gap-3 px-8 py-4 rounded-2xl font-semibold glass text-white/50 cursor-not-allowed select-none"
+            class="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-semibold glass text-white/50 cursor-not-allowed select-none whitespace-nowrap"
             aria-disabled="true"
           >
             <svg class="w-5 h-5 shrink-0 opacity-50" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M3 5.5 11 4.5v7H3V5.5zm0 9.5 8 1.1V12H3v3zm9-10.1L21 3v8h-9V4.9zM12 12h9v9l-9-1.4V12z"/>
             </svg>
             Download for Windows
-            <span class="inline-flex items-center justify-center leading-none whitespace-nowrap text-xs font-medium text-spin-300/80 bg-spin-800/50 px-2 py-0.5 rounded-full border border-spin-600/30">Coming soon</span>
+            <span class="text-xs font-normal text-white/40 bg-white/10 px-2 py-0.5 rounded-full leading-none">Soon</span>
           </div>
         </div>
 
