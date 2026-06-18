@@ -1,17 +1,15 @@
-export class DownloadCounter {
-  constructor(state) {
-    this.state = state;
-  }
+import { DurableObject } from "cloudflare:workers";
 
+export class DownloadCounter extends DurableObject {
   async fetch(request) {
-    let count = (await this.state.storage.get("count")) ?? 0;
-    let updatedAt = (await this.state.storage.get("updatedAt")) ?? null;
+    let count = (await this.ctx.storage.get("count")) ?? 0;
+    let updatedAt = (await this.ctx.storage.get("updatedAt")) ?? null;
 
     if (request.method === "POST") {
       count += 1;
       updatedAt = new Date().toISOString();
-      await this.state.storage.put("count", count);
-      await this.state.storage.put("updatedAt", updatedAt);
+      await this.ctx.storage.put("count", count);
+      await this.ctx.storage.put("updatedAt", updatedAt);
     }
 
     return Response.json(

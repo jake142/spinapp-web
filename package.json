@@ -18,13 +18,12 @@
     "astro": "astro",
     "sync-release": "node scripts/sync-release.mjs"
   },
-  "devDependencies": {
-    "wrangler": "^4.24.0"
-  },
+  "devDependencies": {},
   "dependencies": {
     "@netlify/blobs": "^10.0.0",
     "@tailwindcss/vite": "^4.3.1",
     "astro": "^6.4.7",
-    "tailwindcss": "^4.3.1"
+    "tailwindcss": "^4.3.1",
+    "wrangler": "^4.24.0"
   }
 }
