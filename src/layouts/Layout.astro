@@ -36,6 +36,20 @@ const {
   <body class="mesh-bg text-white antialiased">
     <slot />
     <script define:vars={{ trackFile: release.filename }}>
+      function trackDownload(file) {
+        const url = `/api/download-count?file=${encodeURIComponent(file)}`;
+        fetch(url, { method: "POST", keepalive: true })
+          .then((response) => (response.ok ? response.json() : null))
+          .then((data) => {
+            if (data && typeof data.count === "number") {
+              document.dispatchEvent(
+                new CustomEvent("spinapp:download-tracked", { detail: data }),
+              );
+            }
+          })
+          .catch(() => {});
+      }
+
       document.addEventListener("click", (event) => {
         const link = event.target.closest("[data-track-download]");
         if (!link) return;
@@ -43,12 +57,7 @@ const {
         const file = link.getAttribute("data-track-download") || trackFile;
         if (!file) return;
 
-        const url = `/api/track-download?file=${encodeURIComponent(file)}`;
-        if (navigator.sendBeacon) {
-          navigator.sendBeacon(url);
-        } else {
-          fetch(url, { method: "POST", keepalive: true }).catch(() => {});
-        }
+        trackDownload(file);
       });
     </script>
   </body>

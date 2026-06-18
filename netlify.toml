@@ -13,7 +13,7 @@
 
 [[redirects]]
   from = "/api/track-download"
-  to = "/.netlify/functions/track-download"
+  to = "/.netlify/functions/download-count"
   status = 200
 
 [[redirects]]

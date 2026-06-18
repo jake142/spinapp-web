@@ -71,11 +71,34 @@ const { compact = false } = Astro.props;
     return null;
   }
 
+  function endpointIsLive() {
+    return window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1";
+  }
+
+  function renderCount(
+    root: Element,
+    valueEl: HTMLElement,
+    labelEl: HTMLElement,
+    liveEl: HTMLElement | null,
+    data: { count: number; updatedAt: string | null },
+    animateFrom = 0,
+  ) {
+    labelEl.textContent = data.count === 0 ? "Be among the first to download" : "macOS downloads";
+    root.classList.remove("download-counter--pending");
+    animateValue(valueEl, animateFrom, data.count);
+
+    if (endpointIsLive()) {
+      liveEl?.removeAttribute("hidden");
+    }
+  }
+
   document.querySelectorAll("[data-download-counter]").forEach((root) => {
     const valueEl = root.querySelector("[data-counter-value]") as HTMLElement | null;
     const labelEl = root.querySelector("[data-counter-label]") as HTMLElement | null;
     const liveEl = root.querySelector("[data-counter-live]") as HTMLElement | null;
     if (!valueEl || !labelEl) return;
+
+    let currentCount = 0;
 
     fetchDownloadCount().then((data) => {
       if (!data) {
@@ -83,22 +106,17 @@ const { compact = false } = Astro.props;
         return;
       }
 
-      labelEl.textContent = "macOS downloads";
-      root.classList.remove("download-counter--pending");
-      animateValue(valueEl, 0, data.count);
-
-      if (endpointIsLive()) {
-        liveEl?.removeAttribute("hidden");
-      }
-
-      if (data.count === 0) {
-        labelEl.textContent = "Be among the first to download";
-      }
+      currentCount = data.count;
+      renderCount(root, valueEl, labelEl, liveEl, data);
     });
 
-    function endpointIsLive() {
-      return window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1";
-    }
+    document.addEventListener("spinapp:download-tracked", (event) => {
+      const detail = (event as CustomEvent<{ count: number; updatedAt: string | null }>).detail;
+      if (!detail || typeof detail.count !== "number") return;
+
+      currentCount = detail.count;
+      renderCount(root, valueEl, labelEl, liveEl, detail, currentCount > 0 ? currentCount - 1 : 0);
+    });
   });
 </script>
 
