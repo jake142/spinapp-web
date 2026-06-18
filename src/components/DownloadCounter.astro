@@ -1,0 +1,208 @@
+---
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+---
+
+<div
+  class:list={[
+    "download-counter",
+    compact && "download-counter--compact",
+    "download-counter--pending",
+  ]}
+  data-download-counter
+>
+  <div class="download-counter__icon" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v12m0 0l4-4m-4 4l-4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
+    </svg>
+  </div>
+  <div class="download-counter__body">
+    <p class="download-counter__value" data-counter-value>—</p>
+    <p class="download-counter__label">
+      <span data-counter-label>Loading downloads…</span>
+    </p>
+  </div>
+  <span class="download-counter__live" data-counter-live hidden aria-hidden="true">
+    <span class="download-counter__dot"></span>
+    live
+  </span>
+</div>
+
+<script>
+  function formatCount(value: number) {
+    return value.toLocaleString("en-US");
+  }
+
+  function animateValue(el: HTMLElement, from: number, to: number, duration = 900) {
+    if (from === to) {
+      el.textContent = formatCount(to);
+      return;
+    }
+    const start = performance.now();
+    const step = (now: number) => {
+      const t = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const current = Math.round(from + (to - from) * eased);
+      el.textContent = formatCount(current);
+      if (t < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  async function fetchDownloadCount(): Promise<{ count: number; updatedAt: string | null } | null> {
+    const endpoints = ["/api/download-count", "/api/download-count.json"];
+
+    for (const endpoint of endpoints) {
+      try {
+        const res = await fetch(endpoint, { cache: "no-store" });
+        if (!res.ok) continue;
+        const data = await res.json();
+        if (typeof data.count === "number") {
+          return { count: data.count, updatedAt: data.updatedAt ?? null };
+        }
+      } catch {
+        // try next endpoint
+      }
+    }
+
+    return null;
+  }
+
+  document.querySelectorAll("[data-download-counter]").forEach((root) => {
+    const valueEl = root.querySelector("[data-counter-value]") as HTMLElement | null;
+    const labelEl = root.querySelector("[data-counter-label]") as HTMLElement | null;
+    const liveEl = root.querySelector("[data-counter-live]") as HTMLElement | null;
+    if (!valueEl || !labelEl) return;
+
+    fetchDownloadCount().then((data) => {
+      if (!data) {
+        labelEl.textContent = "Download counter unavailable";
+        return;
+      }
+
+      labelEl.textContent = "macOS downloads";
+      root.classList.remove("download-counter--pending");
+      animateValue(valueEl, 0, data.count);
+
+      if (endpointIsLive()) {
+        liveEl?.removeAttribute("hidden");
+      }
+
+      if (data.count === 0) {
+        labelEl.textContent = "Be among the first to download";
+      }
+    });
+
+    function endpointIsLive() {
+      return window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1";
+    }
+  });
+</script>
+
+<style>
+  .download-counter {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.75rem 1.125rem;
+    border-radius: 1rem;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(88, 28, 135, 0.15);
+  }
+
+  .download-counter--compact {
+    padding: 0.5rem 0.875rem;
+    gap: 0.625rem;
+    border-radius: 9999px;
+  }
+
+  .download-counter--compact .download-counter__value {
+    font-size: 1rem;
+  }
+
+  .download-counter--compact .download-counter__label {
+    font-size: 0.65rem;
+  }
+
+  .download-counter--compact .download-counter__icon {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .download-counter--pending .download-counter__value {
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  .download-counter__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.75rem;
+    background: linear-gradient(135deg, rgba(167, 243, 208, 0.2), rgba(52, 211, 153, 0.08));
+    color: rgb(110, 231, 183);
+    flex-shrink: 0;
+  }
+
+  .download-counter__icon svg {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
+  .download-counter__body {
+    min-width: 0;
+    text-align: left;
+  }
+
+  .download-counter__value {
+    font-size: 1.375rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+    color: white;
+  }
+
+  .download-counter__label {
+    margin-top: 0.125rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.42);
+  }
+
+  .download-counter__live {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-left: 0.125rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: rgb(110, 231, 183);
+    background: rgba(16, 185, 129, 0.12);
+  }
+
+  .download-counter__dot {
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 9999px;
+    background: rgb(52, 211, 153);
+    animation: counter-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes counter-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.45; transform: scale(0.85); }
+  }
+</style>

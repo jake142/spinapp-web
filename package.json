@@ -9,12 +9,14 @@
     "predev": "node scripts/sync-release.mjs",
     "prebuild": "node scripts/sync-release.mjs",
     "dev": "astro dev",
+    "dev:netlify": "netlify dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
     "sync-release": "node scripts/sync-release.mjs"
   },
   "dependencies": {
+    "@netlify/blobs": "^10.0.0",
     "@tailwindcss/vite": "^4.3.1",
     "astro": "^6.4.7",
     "tailwindcss": "^4.3.1"

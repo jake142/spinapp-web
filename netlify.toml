@@ -1,0 +1,17 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/api/download-count"
+  to = "/.netlify/functions/download-count"
+  status = 200
+
+[[redirects]]
+  from = "/download"
+  to = "/.netlify/functions/track-download"
+  status = 200
