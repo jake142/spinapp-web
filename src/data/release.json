@@ -1,7 +1,7 @@
 {
-  "version": "0.1.5",
+  "version": "0.1.6",
   "arch": "aarch64",
-  "filename": "SpinApp_0.1.5_aarch64.dmg",
-  "downloadUrl": "/downloads/SpinApp_0.1.5_aarch64.dmg",
+  "filename": "SpinApp_0.1.6_aarch64.dmg",
+  "downloadUrl": "/downloads/SpinApp_0.1.6_aarch64.dmg",
   "githubUrl": "https://github.com/jake142/spinapp-web"
 }

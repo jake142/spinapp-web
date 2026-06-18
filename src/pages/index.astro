@@ -5,6 +5,24 @@ import release from "../data/release.json";
 
 const features = [
   {
+    icon: "ai",
+    title: "AI-enabled out of the box",
+    description:
+      "Every SpinApp project ships with a bundled MCP server. Setup AI configures your assistant, writes project rules, and gives AI the right container context — no manual docker exec wiring.",
+  },
+  {
+    icon: "mcp",
+    title: "Works with your AI assistant",
+    description:
+      "Use Cursor, Claude Desktop, or any MCP-compatible client. SpinApp exposes exec, sql, logs, start, stop, and status — your agent runs commands inside the right container.",
+  },
+  {
+    icon: "audit",
+    title: "AI activity log",
+    description:
+      "See every MCP tool call in SpinApp — command, container, exit code, and timestamp. Know exactly what your AI assistant ran in your dev environment.",
+  },
+  {
     icon: "scan",
     title: "Laravel project scanning",
     description:
@@ -21,12 +39,6 @@ const features = [
     title: "Migrations-ready databases",
     description:
       "PostgreSQL with pgvector, MySQL, MariaDB, or SQLite — provisioned and connected before you run artisan migrate. Credentials land in your .env automatically.",
-  },
-  {
-    icon: "dashboard",
-    title: "artisan at your fingertips",
-    description:
-      "Start, stop, and restart your Laravel environment from one dashboard. Queue workers and schedulers included — no terminal tab juggling.",
   },
   {
     icon: "terminal",
@@ -67,6 +79,11 @@ const steps = [
   },
   {
     num: "03",
+    title: "Connect your AI assistant",
+    description: "One click configures MCP for Cursor and Claude Desktop — project rules included. Your assistant is ready to exec inside containers.",
+  },
+  {
+    num: "04",
     title: "artisan migrate & go",
     description: "Hit start. Containers launch, the DB provisions, and you're at my-app.local with npm run dev ready.",
   },
@@ -75,15 +92,22 @@ const steps = [
 const stackFeatured = [
   { name: "Laravel", logo: "/logos/laravel.svg" },
   {
-    name: "Frontends",
+    name: "AI assistants",
     logos: [
-      { name: "Vue.js", logo: "/logos/vue.svg" },
-      { name: "React", logo: "/logos/react.svg" },
+      { name: "Cursor", logo: "/logos/cursor.svg" },
+      { name: "Claude", logo: "/logos/claude.svg" },
     ],
   },
 ] ;
 
 const stackGroups = [
+  {
+    label: "AI assistants",
+    items: [
+      { name: "Cursor", logo: "/logos/cursor.svg" },
+      { name: "Claude", logo: "/logos/claude.svg" },
+    ],
+  },
   {
     label: "PHP & tooling",
     items: [
@@ -141,6 +165,7 @@ const stackGroups = [
       </a>
       <div class="flex items-center gap-4">
         <a href="#features" class="hidden sm:inline text-sm text-white/60 hover:text-white transition-colors">Features</a>
+        <a href="#ai" class="hidden sm:inline text-sm text-white/60 hover:text-white transition-colors">AI</a>
         <a href="#how-it-works" class="hidden sm:inline text-sm text-white/60 hover:text-white transition-colors">How it works</a>
         <a
           href={release.downloadUrl}
@@ -159,20 +184,33 @@ const stackGroups = [
       <div class="flex-1 text-center lg:text-left">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full glass text-xs font-medium text-spin-200 mb-6">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-          v{release.version} — Laravel &amp; frontends
+          v{release.version} — AI-enabled Laravel dev
         </div>
 
         <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight mb-6">
           <span class="text-gradient">Laravel local dev,</span>
           <br />
-          spun up in seconds
+          AI-enabled
         </h1>
 
-        <p class="text-lg sm:text-xl text-white/65 max-w-xl mx-auto lg:mx-0 leading-relaxed mb-10">
-          Pick your Laravel app — with or without a Vue/React frontend. SpinApp scans the stack,
-          provisions the database, starts queue workers, and serves everything at <span class="text-white/80">*.local</span>.
-          No docker-compose.yml required.
+        <p class="text-lg sm:text-xl text-white/65 max-w-xl mx-auto lg:mx-0 leading-relaxed mb-8">
+          SpinApp spins up Docker — database, queue, cache, and frontend — and ships with
+          <span class="text-white/80"> MCP built in</span>. Connect Cursor, Claude, or any MCP assistant
+          and let AI run artisan, npm, and SQL inside your containers.
         </p>
+
+        <div class="flex items-center justify-center lg:justify-start gap-4 mb-10">
+          <span class="text-xs uppercase tracking-wider text-white/35">Works with</span>
+          <div class="flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/95 p-2 shadow-md ring-1 ring-black/5" title="Cursor">
+              <img src="/logos/cursor.svg" alt="Cursor" class="h-full w-full object-contain" width="24" height="24" />
+            </div>
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/95 p-2 shadow-md ring-1 ring-black/5" title="Claude">
+              <img src="/logos/claude.svg" alt="Claude" class="h-full w-full object-contain" width="24" height="24" />
+            </div>
+            <span class="text-sm text-white/45">+ any MCP client</span>
+          </div>
+        </div>
 
         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 justify-center lg:justify-start">
           <a
@@ -216,12 +254,12 @@ const stackGroups = [
   <section class="relative z-10 border-y border-white/8 bg-white/[0.02]">
     <div class="max-w-6xl mx-auto px-6 py-8 grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
       <div>
-        <div class="text-2xl sm:text-3xl font-bold text-gradient">artisan</div>
-        <div class="text-sm text-white/45 mt-1">Built into the console</div>
+        <div class="text-2xl sm:text-3xl font-bold text-gradient">AI-enabled</div>
+        <div class="text-sm text-white/45 mt-1">MCP server bundled in every project</div>
       </div>
       <div>
-        <div class="text-2xl sm:text-3xl font-bold text-gradient">SPX</div>
-        <div class="text-sm text-white/45 mt-1">HTTP &amp; SQL profiling</div>
+        <div class="text-2xl sm:text-3xl font-bold text-gradient">MCP</div>
+        <div class="text-sm text-white/45 mt-1">Cursor, Claude &amp; more</div>
       </div>
       <div>
         <div class="text-2xl sm:text-3xl font-bold text-gradient">Queues</div>
@@ -238,11 +276,11 @@ const stackGroups = [
   <section id="features" class="relative z-10 max-w-6xl mx-auto px-6 py-24 sm:py-32">
     <div class="text-center mb-16">
       <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
-        Everything a <span class="text-gradient">Laravel developer</span> needs locally
+        Everything a <span class="text-gradient">Laravel developer</span> needs — AI-enabled
       </h2>
       <p class="text-white/55 max-w-2xl mx-auto text-lg">
-        From first clone to running migrations, queues, and a hot-reloading frontend —
-        SpinApp replaces the usual Docker + hosts + tunnel setup with one app.
+        Docker environments, a built-in MCP server, and an audit log of every AI tool call —
+        SpinApp replaces the usual Docker + hosts + terminal setup with one app.
       </p>
     </div>
 
@@ -250,6 +288,15 @@ const stackGroups = [
       {features.map((f) => (
         <div class="group glass rounded-2xl p-6 hover:bg-white/[0.09] hover:border-white/20 transition-all duration-300 hover:-translate-y-1">
           <div class="w-10 h-10 rounded-xl bg-spin-500/20 flex items-center justify-center mb-4 group-hover:bg-spin-500/30 transition-colors">
+            {f.icon === "ai" && (
+              <svg class="w-5 h-5 text-spin-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z"/></svg>
+            )}
+            {f.icon === "mcp" && (
+              <svg class="w-5 h-5 text-spin-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"/></svg>
+            )}
+            {f.icon === "audit" && (
+              <svg class="w-5 h-5 text-spin-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25z"/></svg>
+            )}
             {f.icon === "scan" && (
               <svg class="w-5 h-5 text-spin-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
             )}
@@ -282,6 +329,72 @@ const stackGroups = [
     </div>
   </section>
 
+  <!-- AI spotlight -->
+  <section id="ai" class="relative z-10 border-t border-white/8 bg-white/[0.02]">
+    <div class="max-w-6xl mx-auto px-6 py-24 sm:py-32">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-spin-300 mb-4">Built into SpinApp</p>
+          <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
+            Your AI assistant knows <span class="text-gradient">your containers</span>
+          </h2>
+          <p class="text-white/55 text-lg leading-relaxed mb-6">
+            SpinApp is AI-enabled for everyone — not tied to one editor. A bundled MCP server lets
+            Cursor, Claude Desktop, or any compatible client start environments, run migrations,
+            query the database, tail Laravel logs, and build frontends inside the right Docker container.
+          </p>
+          <div class="flex items-center gap-3 mb-6">
+            <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-white/95 p-2.5 shadow-md ring-1 ring-black/5">
+              <img src="/logos/cursor.svg" alt="Cursor" class="h-full w-full object-contain" width="28" height="28" />
+            </div>
+            <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-white/95 p-2.5 shadow-md ring-1 ring-black/5">
+              <img src="/logos/claude.svg" alt="Claude" class="h-full w-full object-contain" width="28" height="28" />
+            </div>
+            <p class="text-sm text-white/50">Setup AI configures both — one click per project.</p>
+          </div>
+          <ul class="space-y-3 text-sm text-white/60">
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span><strong class="text-white/80">exec</strong> — artisan, composer, npm run build/dev in app or queue containers</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span><strong class="text-white/80">sql</strong> — run queries against your provisioned database</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span><strong class="text-white/80">logs</strong> — container output and Laravel log files</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span><strong class="text-white/80">start / stop / status</strong> — full environment control from your AI assistant</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="rounded-2xl bg-spin-950/60 border border-white/8 p-6 font-mono text-sm leading-relaxed overflow-hidden">
+          <div class="flex items-center gap-2 mb-4 pb-3 border-b border-white/8">
+            <img src="/logos/cursor.svg" alt="" class="w-5 h-5 opacity-80" width="20" height="20" />
+            <img src="/logos/claude.svg" alt="" class="w-5 h-5 opacity-80" width="20" height="20" />
+            <span class="text-white/30 text-xs">MCP · spinapp</span>
+          </div>
+          <div class="text-spin-300/80">
+            <span class="text-violet-300">spinapp</span> <span class="text-white/50">exec</span> php artisan migrate --seed<br />
+            <span class="text-white/40">→ container: spinapp-my-app-app · exit 0</span><br />
+            <br />
+            <span class="text-violet-300">spinapp</span> <span class="text-white/50">sql</span> SELECT count(*) FROM users<br />
+            <span class="text-white/40">→ container: spinapp-my-app-db · exit 0</span><br />
+            <br />
+            <span class="text-violet-300">spinapp</span> <span class="text-white/50">exec</span> npm run build<br />
+            <span class="text-white/40">→ container: spinapp-my-app-app · exit 0</span><br />
+            <br />
+            <span class="text-emerald-400">✓</span> <span class="text-white/70">Logged in SpinApp AI activity panel</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- How it works -->
   <section id="how-it-works" class="relative z-10 border-t border-white/8">
     <div class="max-w-6xl mx-auto px-6 py-24 sm:py-32">
@@ -290,11 +403,11 @@ const stackGroups = [
           From <span class="text-gradient">composer install</span> to my-app.local
         </h2>
         <p class="text-white/55 max-w-xl mx-auto text-lg">
-          Three steps. No DevOps rabbit holes. Just your Laravel app running the way it should.
+          Four steps. No DevOps rabbit holes. Laravel running locally — AI-enabled from day one.
         </p>
       </div>
 
-      <div class="grid md:grid-cols-3 gap-8">
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
         {steps.map((step, i) => (
           <div class="relative text-center md:text-left">
             {i < steps.length - 1 && (
@@ -319,14 +432,18 @@ const stackGroups = [
       <div class="relative grid lg:grid-cols-2 gap-10 items-center">
         <div>
           <h2 class="text-2xl sm:text-3xl font-bold tracking-tight mb-4">
-            Laravel-first, frontend-ready
+            Laravel-first, AI-enabled
           </h2>
           <p class="text-white/55 leading-relaxed mb-6">
             SpinApp is built around how Laravel teams actually work — PHP-FPM in Docker, Redis for cache
             and sessions, a queue worker container, and npm run dev for your Inertia or API frontend.
-            Native macOS app, private by default, fast to launch.
+            Connect your AI assistant and it inherits the same container context.
           </p>
           <ul class="space-y-3 text-sm text-white/60">
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              AI-enabled — MCP server bundled, Setup AI for Cursor &amp; Claude Desktop
+            </li>
             <li class="flex items-start gap-3">
               <svg class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
               Setup wizard for PHP version, database, cache, queue &amp; web server
@@ -334,10 +451,6 @@ const stackGroups = [
             <li class="flex items-start gap-3">
               <svg class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
               Vue &amp; React frontends detected and served alongside your Laravel app
-            </li>
-            <li class="flex items-start gap-3">
-              <svg class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              Automatic *.local domains — no manual /etc/hosts editing
             </li>
             <li class="flex items-start gap-3">
               <svg class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
@@ -378,10 +491,10 @@ const stackGroups = [
   <section class="relative z-10 border-t border-white/8">
     <div class="max-w-3xl mx-auto px-6 py-24 text-center">
       <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
-        Ready to spin up Laravel?
+        Ready for AI-enabled Laravel dev?
       </h2>
       <p class="text-white/55 text-lg mb-10">
-        Download SpinApp for macOS — from zero to artisan migrate in minutes.
+        Download SpinApp for macOS — Docker environments, MCP for Cursor &amp; Claude, and artisan migrate in minutes.
       </p>
       <a
         href={release.downloadUrl}

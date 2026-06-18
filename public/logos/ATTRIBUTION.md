@@ -2,7 +2,7 @@
 
 Icon glyphs in this folder are sourced from [Simple Icons](https://simpleicons.org/) and used under the [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/) license.
 
-Custom marks for Colima, Valkey, and Cursor are original simplified icons created for this site.
+Custom marks for Colima and Valkey are original simplified icons created for this site.
 
 ## Trademark notice
 
