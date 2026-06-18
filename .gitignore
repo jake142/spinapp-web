@@ -1,6 +1,7 @@
 # build output
 dist/
 .wrangler/
+worker-configuration.d.ts
 # generated types
 .astro/
 
