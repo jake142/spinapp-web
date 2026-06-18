@@ -12,8 +12,14 @@
     "dev:netlify": "netlify dev",
     "build": "astro build",
     "preview": "astro preview",
+    "preview:cf": "npm run build && wrangler dev",
+    "deploy:cf": "wrangler deploy",
+    "deploy:netlify": "npm run build && netlify deploy --prod",
     "astro": "astro",
     "sync-release": "node scripts/sync-release.mjs"
+  },
+  "devDependencies": {
+    "wrangler": "^4.24.0"
   },
   "dependencies": {
     "@netlify/blobs": "^10.0.0",

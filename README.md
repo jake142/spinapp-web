@@ -21,20 +21,38 @@ The download link is synced from the latest `.dmg` in `../spinapp/release/` and 
 
 ## Deploy
 
-Static output in `dist/`. **Download counting requires Netlify Functions** (included in this repo).
+Static output in `dist/`. **Download counting needs a server route** — production uses **Cloudflare Workers** (see `wrangler.toml`).
 
-### Netlify (recommended)
+### Cloudflare Workers (production)
 
-1. Create a site at [Netlify](https://app.netlify.com/) from this GitHub repo.
-2. Add GitHub Actions secrets on the repo:
-   - `NETLIFY_AUTH_TOKEN` — personal access token from Netlify → User settings → Applications
-   - `NETLIFY_SITE_ID` — Site configuration → Site details → Site ID
-3. Push to `main`. The workflow deploys the built site and enables `/api/download-count`.
+The repo includes a Worker with a Durable Object counter for `/api/download-count`.
 
-Local dev with a working counter:
+Build + deploy locally:
+
+```bash
+npm run deploy:cf
+```
+
+If the site is connected via **Cloudflare Workers Builds** on GitHub, ensure the build command is:
+
+```bash
+npm ci && npx wrangler deploy
+```
+
+`wrangler.toml` runs `npm run build` (Astro) first, then deploys `dist/` as static assets with the Worker handling `/api/*`.
+
+### Netlify (optional)
+
+Netlify Functions in `netlify/` are an alternative backend. Add `NETLIFY_AUTH_TOKEN` and `NETLIFY_SITE_ID` GitHub secrets to use the deploy workflow.
+
+### Local dev
 
 ```bash
 npm run dev
 ```
 
-Plain `astro build` + static hosting (GitHub Pages only) serves downloads, but the counter stays at the static fallback value unless you also deploy the Netlify functions.
+Uses a local file-backed counter. For a production-like test:
+
+```bash
+npm run preview:cf
+```
