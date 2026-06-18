@@ -7,10 +7,5 @@ directory = "./dist"
 binding = "ASSETS"
 run_worker_first = ["/api/*"]
 
-[[durable_objects.bindings]]
-name = "COUNTER"
-class_name = "DownloadCounter"
-
-[[migrations]]
-tag = "v1"
-new_sqlite_classes = ["DownloadCounter"]
+# Bind a KV namespace named DOWNLOADS in the Cloudflare dashboard
+# (Settings → Bindings → KV namespace) to persist the counter across requests.

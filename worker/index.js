@@ -1,33 +1,48 @@
-import { DurableObject } from "cloudflare:workers";
-
-export class DownloadCounter extends DurableObject {
-  async fetch(request) {
-    let count = (await this.ctx.storage.get("count")) ?? 0;
-    let updatedAt = (await this.ctx.storage.get("updatedAt")) ?? null;
-
-    if (request.method === "POST") {
-      count += 1;
-      updatedAt = new Date().toISOString();
-      await this.ctx.storage.put("count", count);
-      await this.ctx.storage.put("updatedAt", updatedAt);
-    }
-
-    return Response.json(
-      { count, updatedAt },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "Cache-Control": "no-store",
-        },
-      },
-    );
-  }
-}
-
 const DMG_PATTERN = /^SpinApp_\d+\.\d+\.\d+_(aarch64|x64)\.dmg$/;
 
-function counterRequest(method) {
-  return new Request("https://counter.internal/", { method });
+const JSON_HEADERS = {
+  "Content-Type": "application/json",
+  "Cache-Control": "no-store",
+};
+
+async function readStaticCount(env) {
+  const response = await env.ASSETS.fetch(
+    new Request("https://assets.local/api/download-count.json"),
+  );
+  if (!response.ok) {
+    return { count: 0, updatedAt: null };
+  }
+
+  const data = await response.json();
+  return {
+    count: typeof data.count === "number" ? data.count : 0,
+    updatedAt: data.updatedAt ?? null,
+  };
+}
+
+async function readCount(env) {
+  if (env.DOWNLOADS) {
+    const data = await env.DOWNLOADS.get("total", "json");
+    if (data && typeof data.count === "number") {
+      return { count: data.count, updatedAt: data.updatedAt ?? null };
+    }
+  }
+
+  return readStaticCount(env);
+}
+
+async function incrementCount(env) {
+  const current = await readCount(env);
+  const payload = {
+    count: current.count + 1,
+    updatedAt: new Date().toISOString(),
+  };
+
+  if (env.DOWNLOADS) {
+    await env.DOWNLOADS.put("total", JSON.stringify(payload));
+  }
+
+  return payload;
 }
 
 async function handleCounterApi(request, env) {
@@ -38,14 +53,17 @@ async function handleCounterApi(request, env) {
     if (file && !DMG_PATTERN.test(file)) {
       return Response.json(
         { error: "Invalid download file" },
-        { status: 400, headers: { "Content-Type": "application/json" } },
+        { status: 400, headers: JSON_HEADERS },
       );
     }
+
+    const data = await incrementCount(env);
+    return Response.json(data, { headers: JSON_HEADERS });
   }
 
-  if (request.method === "GET" || request.method === "POST") {
-    const id = env.COUNTER.idFromName("global");
-    return env.COUNTER.get(id).fetch(counterRequest(request.method));
+  if (request.method === "GET") {
+    const data = await readCount(env);
+    return Response.json(data, { headers: JSON_HEADERS });
   }
 
   return new Response(null, { status: 405 });

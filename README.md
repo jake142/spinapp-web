@@ -25,21 +25,14 @@ Static output in `dist/`. **Download counting needs a server route** — product
 
 ### Cloudflare Workers (production)
 
-The repo includes a Worker with a Durable Object counter for `/api/download-count`.
+The site runs on **Cloudflare Workers** with a small API worker for `/api/download-count`.
 
-Build + deploy locally:
+1. In Cloudflare → Workers → `spinapp-web` → **Settings → Bindings**, add a **KV namespace** binding named `DOWNLOADS`.
+2. Build settings should be:
+   - **Build command:** `npm ci && npm run build`
+   - **Deploy command:** `npx wrangler deploy`
 
-```bash
-npm run deploy:cf
-```
-
-If the site is connected via **Cloudflare Workers Builds** on GitHub, ensure the build command is:
-
-```bash
-npm ci && npx wrangler deploy
-```
-
-`wrangler.toml` runs `npm run build` (Astro) first, then deploys `dist/` as static assets with the Worker handling `/api/*`.
+Without the KV binding, downloads still work but the counter falls back to the static JSON file (`0`).
 
 ### Netlify (optional)
 
