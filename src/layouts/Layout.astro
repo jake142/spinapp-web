@@ -11,6 +11,8 @@ const {
   title = "SpinApp — AI-enabled Laravel local dev",
   description = "Desktop app for Laravel developers. Spin up Docker environments with a built-in MCP server — connect Cursor, Claude, or any MCP assistant to run artisan, npm, SQL, and logs in your containers.",
 } = Astro.props;
+
+const counterApiBase = import.meta.env.PUBLIC_COUNTER_API || "";
 ---
 
 <!doctype html>
@@ -35,9 +37,9 @@ const {
   </head>
   <body class="mesh-bg text-white antialiased">
     <slot />
-    <script define:vars={{ trackFile: release.filename }}>
+    <script define:vars={{ trackFile: release.filename, counterApiBase }}>
       function trackDownload(file) {
-        const url = `/api/download-count?file=${encodeURIComponent(file)}`;
+        const url = `${counterApiBase}/api/download-count?file=${encodeURIComponent(file)}`;
         fetch(url, { method: "POST", keepalive: true })
           .then((response) => (response.ok ? response.json() : null))
           .then((data) => {

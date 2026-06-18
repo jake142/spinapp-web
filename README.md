@@ -1,39 +1,27 @@
-# spinapp-web
-
-Marketing site for [SpinApp](https://github.com/jake142/spinapp) — built with Astro and Tailwind CSS.
-
-## Development
-
-```bash
-nvm use 22
-npm install
-npm run dev
-```
-
-## Build
-
-```bash
-npm run build
-npm run preview
-```
-
-The download link is synced from the latest `.dmg` in `../spinapp/release/` and copied to `public/downloads/` before each dev/build.
-
 ## Deploy
 
-Static output in `dist/`. **Download counting needs a server route** — production uses **Cloudflare Workers** (see `wrangler.toml`).
+The marketing site is static Astro output in `dist/`.
 
-### Cloudflare Workers (production)
+### Download counter
 
-The site uses **@astrojs/cloudflare** with a server route at `/api/download-count`. The adapter provisions a KV namespace automatically — no manual binding needed.
+Counting runs on **Netlify Functions** (`/api/download-count`). Netlify Blobs stores the total.
 
-Cloudflare Workers Builds should use:
-- **Build command:** `npm ci && npm run build`
-- **Deploy command:** `npx wrangler deploy`
+| Host | What to do |
+|------|------------|
+| **Netlify** (recommended) | Deploy via GitHub Actions. Counter works on same origin automatically. |
+| **Cloudflare Workers** (static) | Set build variable `PUBLIC_COUNTER_API` to your Netlify deploy URL (see GitHub Actions log after deploy). Example: `https://your-site.netlify.app` |
 
-### Netlify (optional)
+### Netlify deploy
 
-Netlify Functions in `netlify/` are an alternative backend. Add `NETLIFY_AUTH_TOKEN` and `NETLIFY_SITE_ID` GitHub secrets to use the deploy workflow.
+1. Connect the repo on Netlify or use the GitHub Action.
+2. Add secrets: `NETLIFY_AUTH_TOKEN`, `NETLIFY_SITE_ID`.
+3. Push to `main`.
+
+### Cloudflare Workers (static site)
+
+Cloudflare Workers Builds can keep serving the static site (`npm run build` only). Do **not** add `wrangler.jsonc` unless you migrate fully to Workers server mode.
+
+To show the live counter on Cloudflare, point `PUBLIC_COUNTER_API` at the Netlify URL that hosts the API.
 
 ### Local dev
 
@@ -41,8 +29,8 @@ Netlify Functions in `netlify/` are an alternative backend. Add `NETLIFY_AUTH_TO
 npm run dev
 ```
 
-Uses a local file-backed counter. For a production-like test:
+Uses a local file-backed counter. For Netlify functions locally:
 
 ```bash
-npm run preview:cf
+npm run dev:netlify
 ```

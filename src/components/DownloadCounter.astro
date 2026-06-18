@@ -53,7 +53,13 @@ const { compact = false } = Astro.props;
   }
 
   async function fetchDownloadCount(): Promise<{ count: number; updatedAt: string | null } | null> {
-    const endpoints = ["/api/download-count", "/api/download-count.json"];
+    const apiBase = import.meta.env.PUBLIC_COUNTER_API || "";
+    const endpoints = [
+      `${apiBase}/api/download-count`,
+      "/api/download-count",
+      `${apiBase}/api/download-count.json`,
+      "/api/download-count.json",
+    ];
 
     for (const endpoint of endpoints) {
       try {

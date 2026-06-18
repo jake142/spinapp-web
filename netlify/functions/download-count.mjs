@@ -5,6 +5,9 @@ const DMG_PATTERN = /^SpinApp_\d+\.\d+\.\d+_(aarch64|x64)\.dmg$/;
 const JSON_HEADERS = {
   "Content-Type": "application/json",
   "Cache-Control": "no-store",
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
 };
 
 async function readCount(store) {
@@ -27,6 +30,10 @@ async function incrementCount(store) {
 }
 
 export default async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response(null, { status: 204, headers: JSON_HEADERS });
+  }
+
   const store = getStore("spinapp-downloads");
   const url = new URL(req.url);
 
@@ -48,5 +55,5 @@ export default async (req) => {
     return new Response(JSON.stringify(data), { headers: JSON_HEADERS });
   }
 
-  return new Response(null, { status: 405 });
+  return new Response(null, { status: 405, headers: JSON_HEADERS });
 };
