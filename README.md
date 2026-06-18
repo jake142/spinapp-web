@@ -1,36 +1,27 @@
 ## Deploy
 
-The marketing site is static Astro output in `dist/`.
+Static Astro output in `dist/`. Works on Cloudflare Workers, Netlify, or any static host.
 
 ### Download counter
 
-Counting runs on **Netlify Functions** (`/api/download-count`). Netlify Blobs stores the total.
+The live counter uses a hosted counting API from the browser — no server setup on your host. Local dev (`npm run dev`) still uses the file-backed `/api/download-count` endpoint.
 
-| Host | What to do |
-|------|------------|
-| **Netlify** (recommended) | Deploy via GitHub Actions. Counter works on same origin automatically. |
-| **Cloudflare Workers** (static) | Set build variable `PUBLIC_COUNTER_API` to your Netlify deploy URL (see GitHub Actions log after deploy). Example: `https://your-site.netlify.app` |
+### Cloudflare Workers (production)
 
-### Netlify deploy
+Connect the repo in Cloudflare Workers Builds with build command:
 
-1. Connect the repo on Netlify or use the GitHub Action.
-2. Add secrets: `NETLIFY_AUTH_TOKEN`, `NETLIFY_SITE_ID`.
-3. Push to `main`.
+```bash
+npm ci && npm run build
+```
 
-### Cloudflare Workers (static site)
+No `wrangler.jsonc` needed for the marketing site.
 
-Cloudflare Workers Builds can keep serving the static site (`npm run build` only). Do **not** add `wrangler.jsonc` unless you migrate fully to Workers server mode.
+### Netlify (optional)
 
-To show the live counter on Cloudflare, point `PUBLIC_COUNTER_API` at the Netlify URL that hosts the API.
+Netlify Functions in `netlify/` are kept as a local-dev fallback. You can also deploy the full site to Netlify via GitHub Actions (`NETLIFY_AUTH_TOKEN`, `NETLIFY_SITE_ID` secrets).
 
 ### Local dev
 
 ```bash
 npm run dev
-```
-
-Uses a local file-backed counter. For Netlify functions locally:
-
-```bash
-npm run dev:netlify
 ```

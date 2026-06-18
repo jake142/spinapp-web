@@ -32,6 +32,8 @@ const { compact = false } = Astro.props;
 </div>
 
 <script>
+  import { fetchDownloadCount, isLocalDev } from "../lib/download-counter.ts";
+
   function formatCount(value: number) {
     return value.toLocaleString("en-US");
   }
@@ -52,33 +54,8 @@ const { compact = false } = Astro.props;
     requestAnimationFrame(step);
   }
 
-  async function fetchDownloadCount(): Promise<{ count: number; updatedAt: string | null } | null> {
-    const apiBase = import.meta.env.PUBLIC_COUNTER_API || "";
-    const endpoints = [
-      `${apiBase}/api/download-count`,
-      "/api/download-count",
-      `${apiBase}/api/download-count.json`,
-      "/api/download-count.json",
-    ];
-
-    for (const endpoint of endpoints) {
-      try {
-        const res = await fetch(endpoint, { cache: "no-store" });
-        if (!res.ok) continue;
-        const data = await res.json();
-        if (typeof data.count === "number") {
-          return { count: data.count, updatedAt: data.updatedAt ?? null };
-        }
-      } catch {
-        // try next endpoint
-      }
-    }
-
-    return null;
-  }
-
   function endpointIsLive() {
-    return window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1";
+    return !isLocalDev(window.location.hostname);
   }
 
   function renderCount(
