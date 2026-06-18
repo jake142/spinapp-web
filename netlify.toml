@@ -12,6 +12,11 @@
   status = 200
 
 [[redirects]]
+  from = "/api/track-download"
+  to = "/.netlify/functions/track-download"
+  status = 200
+
+[[redirects]]
   from = "/download"
   to = "/.netlify/functions/track-download"
   status = 200

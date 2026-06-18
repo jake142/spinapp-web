@@ -89,7 +89,7 @@ const data = {
   arch: latest.arch,
   filename: latest.filename,
   dmgUrl: `/downloads/${latest.filename}`,
-  downloadUrl: `/download?file=${encodeURIComponent(latest.filename)}`,
+  downloadUrl: `/downloads/${latest.filename}`,
   githubUrl: `https://github.com/${GITHUB_REPO}`,
 };
 

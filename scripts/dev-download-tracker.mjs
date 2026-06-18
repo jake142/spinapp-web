@@ -32,7 +32,7 @@ export function devDownloadTracker() {
       server.middlewares.use((req, res, next) => {
         const url = new URL(req.url ?? "/", "http://localhost");
 
-        if (url.pathname === "/api/download-count") {
+        if (url.pathname === "/api/download-count" && req.method === "GET") {
           const data = readCount();
           res.statusCode = 200;
           res.setHeader("Content-Type", "application/json");
@@ -41,7 +41,10 @@ export function devDownloadTracker() {
           return;
         }
 
-        if (url.pathname === "/download") {
+        if (
+          (url.pathname === "/api/track-download" && req.method === "POST") ||
+          (url.pathname === "/download" && req.method === "GET")
+        ) {
           const file = url.searchParams.get("file");
           if (!file || !DMG_PATTERN.test(file)) {
             res.statusCode = 400;
@@ -51,6 +54,13 @@ export function devDownloadTracker() {
 
           const data = writeCount(readCount().count + 1);
           console.log(`[downloads] tracked → ${data.count} (${file})`);
+
+          if (url.pathname === "/api/track-download") {
+            res.statusCode = 204;
+            res.end();
+            return;
+          }
+
           res.statusCode = 302;
           res.setHeader("Location", `/downloads/${file}`);
           res.end();

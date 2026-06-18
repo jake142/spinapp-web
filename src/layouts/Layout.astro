@@ -35,5 +35,21 @@ const {
   </head>
   <body class="mesh-bg text-white antialiased">
     <slot />
+    <script define:vars={{ trackFile: release.filename }}>
+      document.addEventListener("click", (event) => {
+        const link = event.target.closest("[data-track-download]");
+        if (!link) return;
+
+        const file = link.getAttribute("data-track-download") || trackFile;
+        if (!file) return;
+
+        const url = `/api/track-download?file=${encodeURIComponent(file)}`;
+        if (navigator.sendBeacon) {
+          navigator.sendBeacon(url);
+        } else {
+          fetch(url, { method: "POST", keepalive: true }).catch(() => {});
+        }
+      });
+    </script>
   </body>
 </html>
