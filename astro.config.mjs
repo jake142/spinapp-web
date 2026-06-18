@@ -6,6 +6,7 @@ import { devDownloadTracker } from './scripts/dev-download-tracker.mjs';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://spinapp.site',
   vite: {
     plugins: [tailwindcss(), devDownloadTracker()],
   },
