@@ -7,21 +7,15 @@ import release from "../data/release.json";
 const features = [
   {
     icon: "ai",
-    title: "AI-enabled out of the box",
+    title: "AI assistant ready",
     description:
-      "Every SpinApp project ships with a bundled MCP server. Setup AI configures your assistant, writes project rules, and gives AI the right container context — no manual docker exec wiring.",
+      "Every project ships with a bundled MCP server. Connect Cursor, Claude Desktop, or any MCP client — Setup AI writes project rules and gives your assistant the right container context. Run exec, sql, logs, start, and stop inside Docker, with an audit log of every tool call.",
   },
   {
-    icon: "mcp",
-    title: "Works with your AI assistant",
+    icon: "queues",
+    title: "Queue dashboard",
     description:
-      "Use Cursor, Claude Desktop, or any MCP-compatible client. SpinApp exposes exec, sql, logs, start, stop, and status — your agent runs commands inside the right container.",
-  },
-  {
-    icon: "audit",
-    title: "AI activity log",
-    description:
-      "See every MCP tool call in SpinApp — command, container, exit code, and timestamp. Know exactly what your AI assistant ran in your dev environment.",
+      "See pending, processing, delayed, and failed jobs without Horizon. Start and scale workers, expand job payloads, retry failures, and run queue:clear or queue:flush — Redis, database, and RabbitMQ drivers supported.",
   },
   {
     icon: "scan",
@@ -261,16 +255,16 @@ const stackGroups = [
   <section class="relative z-10 border-y border-white/8 bg-white/[0.02]">
     <div class="max-w-6xl mx-auto px-6 py-8 grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
       <div>
-        <div class="text-2xl sm:text-3xl font-bold text-gradient">AI-enabled</div>
-        <div class="text-sm text-white/45 mt-1">MCP server bundled in every project</div>
+        <div class="text-2xl sm:text-3xl font-bold text-gradient">Queues</div>
+        <div class="text-sm text-white/45 mt-1">Dashboard, workers &amp; job payloads</div>
       </div>
       <div>
         <div class="text-2xl sm:text-3xl font-bold text-gradient">MCP</div>
         <div class="text-sm text-white/45 mt-1">Cursor, Claude &amp; more</div>
       </div>
       <div>
-        <div class="text-2xl sm:text-3xl font-bold text-gradient">Queues</div>
-        <div class="text-sm text-white/45 mt-1">Redis, Valkey &amp; RabbitMQ</div>
+        <div class="text-2xl sm:text-3xl font-bold text-gradient">Docker</div>
+        <div class="text-sm text-white/45 mt-1">Full stack, zero Compose</div>
       </div>
       <div>
         <div class="text-2xl sm:text-3xl font-bold text-gradient">Vue + React</div>
@@ -283,10 +277,10 @@ const stackGroups = [
   <section id="features" class="relative z-10 max-w-6xl mx-auto px-6 py-24 sm:py-32">
     <div class="text-center mb-16">
       <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
-        Everything a <span class="text-gradient">Laravel developer</span> needs — AI-enabled
+        Everything a <span class="text-gradient">Laravel developer</span> needs
       </h2>
       <p class="text-white/55 max-w-2xl mx-auto text-lg">
-        Docker environments, a built-in MCP server, and an audit log of every AI tool call —
+        Docker environments, databases, queues, profiling, and optional MCP for your AI assistant —
         SpinApp replaces the usual Docker + hosts + terminal setup with one app.
       </p>
     </div>
@@ -297,6 +291,9 @@ const stackGroups = [
           <div class="w-10 h-10 rounded-xl bg-spin-500/20 flex items-center justify-center mb-4 group-hover:bg-spin-500/30 transition-colors">
             {f.icon === "ai" && (
               <svg class="w-5 h-5 text-spin-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z"/></svg>
+            )}
+            {f.icon === "queues" && (
+              <svg class="w-5 h-5 text-spin-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.25 4.5h13.5a2.25 2.25 0 012.25 2.25v.75H3v-.75A2.25 2.25 0 015.25 4.5z"/></svg>
             )}
             {f.icon === "mcp" && (
               <svg class="w-5 h-5 text-spin-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"/></svg>
@@ -447,6 +444,10 @@ const stackGroups = [
             Connect your AI assistant and it inherits the same container context.
           </p>
           <ul class="space-y-3 text-sm text-white/60">
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Queue dashboard — pending jobs, scale workers, retry failures
+            </li>
             <li class="flex items-start gap-3">
               <svg class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
               AI-enabled — MCP server bundled, Setup AI for Cursor &amp; Claude Desktop
