@@ -1,0 +1,31 @@
+# SpinApp
+
+> Official machine-readable knowledge for SpinApp.
+> morgon-managed: spinapp
+
+## Search
+
+- [Search all knowledge](https://emission-excellence-moses-detect.trycloudflare.com/search)
+
+## Company
+
+- [SpinApp overview: AI-enabled Laravel local development](https://emission-excellence-moses-detect.trycloudflare.com/t/spinapp-overview-laravel-local-dev.md) — SpinApp is positioned as “Laravel local dev, AI-enabled,” designed to replace th...
+
+## Product
+
+- [Access and share your local Laravel app (.local and Cloudflare tunnel)](https://emission-excellence-moses-detect.trycloudflare.com/t/local-access-hosts-cloudflare-tunnel.md) — SpinApp manages /etc/hosts so your Laravel app is reachable via a *.local domain...
+- [Laravel project scanning and “full stack, zero Compose” behavior](https://emission-excellence-moses-detect.trycloudflare.com/t/laravel-project-scanning-compose-free-full-stack.md) — SpinApp scans your Laravel repository by reading composer.json to detect PHP ver...
+- [Migrations-ready databases and automatic .env credentials](https://emission-excellence-moses-detect.trycloudflare.com/t/migrations-ready-databases-env-credentials.md) — SpinApp describes migrations-ready database support for PostgreSQL (with pgvecto...
+- [Queue dashboard and job operations in SpinApp](https://emission-excellence-moses-detect.trycloudflare.com/t/queue-dashboard-and-job-operations.md) — SpinApp provides a queue dashboard to view job states (pending/processing/delaye...
+- [Run artisan, npm, and SQL inside SpinApp containers](https://emission-excellence-moses-detect.trycloudflare.com/t/spinapp-console-artisan-npm-and-sql-workflows.md) — SpinApp’s homepage describes built-in workflows to run Laravel console commands...
+
+## Getting Started
+
+- [SpinApp setup flow for Laravel projects](https://emission-excellence-moses-detect.trycloudflare.com/t/spinapp-setup-flow-laravel-projects.md) — SpinApp provides a four-step process: select your Laravel repo, run a setup wiza...
+
+## Integrations
+
+- [MCP integration with Cursor and Claude Desktop](https://emission-excellence-moses-detect.trycloudflare.com/t/mcp-integration-cursor-claude-desktop.md) — SpinApp includes an MCP server and offers one-click configuration for Cursor and...
+
+---
+_Updated: 2026-06-20T12:47:34+00:00 · https://emission-excellence-moses-detect.trycloudflare.com_
