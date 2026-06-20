@@ -7,7 +7,7 @@
 set -euo pipefail
 
 SITE="${SITE:-https://spinapp.site}"
-MORGON_PRESENCE="${MORGON_PRESENCE:-https://tunes-appropriate-dispatched-exports.trycloudflare.com/presence/marc-mckenzie}"
+MORGON_PRESENCE="${MORGON_PRESENCE:-https://transform-participant-portrait-francisco.trycloudflare.com/presence/marc-mckenzie}"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
