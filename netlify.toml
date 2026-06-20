@@ -42,7 +42,7 @@
 [[headers]]
   for = "/llms.txt"
   [headers.values]
-    Content-Type = "text/markdown; charset=utf-8"
+    Content-Type = "text/plain; charset=utf-8"
     Access-Control-Allow-Origin = "*"
     Cache-Control = "no-cache, must-revalidate"
     CDN-Cache-Control = "max-age=0"
