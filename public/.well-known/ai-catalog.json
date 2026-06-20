@@ -1,0 +1,22 @@
+{
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "SpinApp",
+    "identifier": "did:web:spinapp.site"
+  },
+  "entries": [
+    {
+      "identifier": "urn:ai:spinapp.site:morgon:ai",
+      "displayName": "SpinApp — Official AI (Morgon)",
+      "type": "application/ai-catalog+json",
+      "url": "https://emission-excellence-moses-detect.trycloudflare.com/presence/spinapp/well-known/ai-catalog.json",
+      "description": "SpinApp's official AI presence, knowledge, and MCP — fully managed by Morgon.",
+      "tags": ["morgon", "official", "knowledge"],
+      "metadata": {
+        "operator": "morgon",
+        "managed": true,
+        "morgonHost": "spinapp.morgon.ai"
+      }
+    }
+  ]
+}
