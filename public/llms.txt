@@ -28,4 +28,4 @@
 - [MCP integration with Cursor and Claude Desktop](https://emission-excellence-moses-detect.trycloudflare.com/t/mcp-integration-cursor-claude-desktop.md) — SpinApp includes an MCP server and offers one-click configuration for Cursor and...
 
 ---
-_Updated: 2026-06-20T12:47:34+00:00 · https://emission-excellence-moses-detect.trycloudflare.com_
+_Updated: 2026-06-20T12:54:37+00:00 · https://emission-excellence-moses-detect.trycloudflare.com_
