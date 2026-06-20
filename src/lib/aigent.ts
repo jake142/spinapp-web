@@ -55,16 +55,29 @@ export function shouldProxyToAigent(pathname: string, host: string): boolean {
 /** Proxy Aigent AI endpoints — path preserved, URL stays on spinapp.site / ai.spinapp.site. */
 export async function proxyAigent(request: Request): Promise<Response> {
   const incoming = new URL(request.url);
-  const upstreamUrl = `${aigentOriginUrl()}${incoming.pathname}${incoming.search}`;
+  const origin = new URL(aigentOriginUrl());
+  const upstreamUrl = `${origin.origin}${incoming.pathname}${incoming.search}`;
+
+  const headers = new Headers();
+  headers.set(
+    "Accept",
+    request.headers.get("Accept") ?? "text/html, text/plain, */*",
+  );
+
+  // Laravel uses the public AI host for links in HTML / llms.txt.
+  if (incoming.hostname !== origin.hostname) {
+    headers.set("X-Forwarded-Host", incoming.hostname);
+    headers.set("X-Forwarded-Proto", incoming.protocol.replace(":", ""));
+    const clientIp = request.headers.get("CF-Connecting-Ip");
+    if (clientIp) {
+      headers.set("X-Forwarded-For", clientIp);
+    }
+  }
 
   let upstream: Response;
 
   try {
-    upstream = await fetch(upstreamUrl, {
-      headers: {
-        Accept: request.headers.get("Accept") ?? "text/html, text/plain, */*",
-      },
-    });
+    upstream = await fetch(upstreamUrl, { headers });
   } catch (error) {
     const message = error instanceof Error ? error.message : "fetch failed";
 
