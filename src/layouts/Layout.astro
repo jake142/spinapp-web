@@ -43,9 +43,6 @@ const ogImageURL = new URL("/og-image.png", site);
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageURL} />
     <link rel="canonical" href={canonicalURL} />
-    <link rel="alternate" type="text/plain" title="SpinApp AI knowledge (llms.txt)" href={`${site.origin}/llms.txt`} />
-    <meta name="ai-knowledge" content={`${site.origin}/llms.txt`} />
-    <link rel="alternate" type="text/html" title="SpinApp AI knowledge" href={`${site.origin}/ai-knowledge`} />
     <title>{title}</title>
   </head>
   <body class="mesh-bg text-white antialiased" data-track-file={release.filename}>
