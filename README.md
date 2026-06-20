@@ -14,12 +14,12 @@ Connect the repo in Cloudflare Workers Builds with build command:
 npm ci && npm run build
 ```
 
-`/llms.txt` is proxied live from Morgon (Cloudflare middleware). No AI agent redirects.
+`/llms.txt` is proxied live from Aigent at `https://ai.spinapp.site/llms.txt` (Cloudflare middleware). No AI agent redirects.
 
-Set `MORGON_PRESENCE_URL` in Cloudflare build/runtime variables when the tunnel URL changes, e.g.:
+Optional override — set `MORGON_PRESENCE_URL` in Cloudflare build/runtime variables to the Aigent base URL (no trailing slash), e.g.:
 
 ```
-https://your-tunnel.trycloudflare.com/presence/spinapp
+https://ai.spinapp.site
 ```
 
 No `wrangler.jsonc` needed for the marketing site.

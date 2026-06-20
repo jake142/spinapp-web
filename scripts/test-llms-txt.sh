@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# Verify spinapp.site/llms.txt proxies Morgon content (200, not redirect).
+# Verify spinapp.site/llms.txt proxies Aigent content (200, not redirect).
 # Usage:
 #   ./scripts/test-llms-txt.sh
-#   MORGON_PRESENCE=https://….trycloudflare.com/presence/marc-mckenzie ./scripts/test-llms-txt.sh
+#   LLMS_ORIGIN=https://ai.spinapp.site ./scripts/test-llms-txt.sh
 
 set -euo pipefail
 
 SITE="${SITE:-https://spinapp.site}"
-MORGON_PRESENCE="${MORGON_PRESENCE:-https://transform-participant-portrait-francisco.trycloudflare.com/presence/spinapp}"
+LLMS_ORIGIN="${LLMS_ORIGIN:-https://ai.spinapp.site}"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -18,17 +18,17 @@ fail() { echo -e "${RED}FAIL${NC} $*"; exit 1; }
 
 echo "=== llms.txt proxy test ==="
 echo "Site:   $SITE/llms.txt"
-echo "Morgon: $MORGON_PRESENCE/llms.txt"
+echo "Origin: $LLMS_ORIGIN/llms.txt"
 echo ""
 
 headers=$(curl -sI "$SITE/llms.txt")
-status=$(echo "$headers" | head -1 | tr -d '\r')
+http_status=$(echo "$headers" | head -1 | tr -d '\r')
 location=$(echo "$headers" | grep -i "^location:" || true)
 
-if echo "$status" | grep -q "200"; then
-  pass "$status (no redirect)"
+if echo "$http_status" | grep -q "200"; then
+  pass "$http_status (no redirect)"
 else
-  fail "Expected 200, got: $status"
+  fail "Expected 200, got: $http_status"
 fi
 
 if [[ -n "$location" ]]; then
@@ -36,12 +36,12 @@ if [[ -n "$location" ]]; then
 fi
 
 body=$(curl -s "$SITE/llms.txt" | head -c 500)
-upstream=$(curl -s "$MORGON_PRESENCE/llms.txt" | head -c 500)
+upstream=$(curl -s "$LLMS_ORIGIN/llms.txt" | head -c 500)
 
 if [[ -n "$body" && "$body" == "$upstream" && "$body" == "# SpinApp"* ]]; then
-  pass "Body matches Morgon llms.txt"
+  pass "Body matches Aigent llms.txt"
 else
-  fail "Body mismatch with Morgon upstream"
+  fail "Body mismatch with $LLMS_ORIGIN/llms.txt"
 fi
 
 echo ""

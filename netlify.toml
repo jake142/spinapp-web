@@ -21,9 +21,9 @@
   to = "/.netlify/functions/track-download"
   status = 200
 
-# Live llms.txt from Morgon (update URL when tunnel rotates)
+# Live llms.txt from Aigent (ai.spinapp.site)
 [[redirects]]
   from = "/llms.txt"
-  to = "https://transform-participant-portrait-francisco.trycloudflare.com/presence/spinapp/llms.txt"
+  to = "https://ai.spinapp.site/llms.txt"
   status = 200
   force = true

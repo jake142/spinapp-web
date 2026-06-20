@@ -1,5 +1,4 @@
-const DEFAULT_MORGON_PRESENCE =
-  "https://transform-participant-portrait-francisco.trycloudflare.com/presence/spinapp";
+const DEFAULT_LLMS_ORIGIN = "https://ai.spinapp.site";
 
 const HOP_BY_HOP = new Set([
   "connection",
@@ -12,23 +11,24 @@ const HOP_BY_HOP = new Set([
   "proxy-authenticate",
 ]);
 
-export function morgonPresenceUrl(): string {
+/** Base URL for Aigent AI site (no trailing slash). Override via MORGON_PRESENCE_URL in Cloudflare. */
+export function llmsOriginUrl(): string {
   const configured = import.meta.env.MORGON_PRESENCE_URL;
 
   if (typeof configured === "string" && configured.length > 0) {
     return configured.replace(/\/$/, "");
   }
 
-  return DEFAULT_MORGON_PRESENCE;
+  return DEFAULT_LLMS_ORIGIN;
 }
 
-export function morgonLlmsUrl(): string {
-  return `${morgonPresenceUrl()}/llms.txt`;
+export function llmsOriginTarget(): string {
+  return `${llmsOriginUrl()}/llms.txt`;
 }
 
-/** Proxy live llms.txt from Morgon — URL stays spinapp.site/llms.txt (status 200, not redirect). */
+/** Proxy live llms.txt from Aigent — URL stays spinapp.site/llms.txt (status 200, not redirect). */
 export async function proxyLlmsTxt(request: Request): Promise<Response> {
-  const upstream = await fetch(morgonLlmsUrl(), {
+  const upstream = await fetch(llmsOriginTarget(), {
     headers: {
       Accept: request.headers.get("Accept") ?? "text/plain, */*",
     },
