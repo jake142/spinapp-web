@@ -1,0 +1,40 @@
+---
+export const prerender = false;
+
+import Layout from "../layouts/Layout.astro";
+import { fetchMorgonText } from "../lib/morgon-proxy";
+
+const { status, body } = await fetchMorgonText("/llms.txt", Astro.request);
+
+if (status !== 200) {
+  return new Response("AI knowledge is temporarily unavailable.", { status });
+}
+
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+const escaped = escapeHtml(body);
+---
+
+<Layout
+  title="AI Knowledge — SpinApp"
+  description="Official machine-readable knowledge index for SpinApp — product overview, features, and documentation for AI assistants."
+>
+  <main class="relative z-10 max-w-3xl mx-auto px-6 py-16">
+    <p class="text-sm text-white/45 mb-4">
+      <a href="/" class="hover:text-white/70 transition-colors">← SpinApp</a>
+    </p>
+    <h1 class="text-3xl font-semibold tracking-tight text-white mb-3">AI Knowledge</h1>
+    <p class="text-white/55 mb-8 leading-relaxed">
+      Official knowledge index for AI assistants. Machine-readable source:
+      <a href="/llms.txt" class="text-white/75 underline underline-offset-2 hover:text-white">/llms.txt</a>
+    </p>
+    <article class="rounded-2xl border border-white/10 bg-white/5 p-6 overflow-x-auto">
+      <pre class="text-sm leading-relaxed text-white/80 whitespace-pre-wrap font-mono">{escaped}</pre>
+    </article>
+  </main>
+</Layout>

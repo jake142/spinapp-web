@@ -61,7 +61,15 @@ export function wantsHtmlDocument(request: Request): boolean {
 
   const accept = (request.headers.get("Accept") ?? "").toLowerCase();
 
-  return accept.includes("text/html") && !accept.includes("text/plain");
+  if (accept.includes("text/plain") && !accept.includes("text/html")) {
+    return false;
+  }
+
+  return (
+    accept.includes("text/html") ||
+    accept === "*/*" ||
+    accept.startsWith("*/*;")
+  );
 }
 
 export function llmsHtmlDocument(body: string): string {

@@ -16,3 +16,4 @@ User-agent: Google-Extended
 Allow: /llms.txt
 
 Sitemap: https://spinapp.site/llms.txt
+Sitemap: https://spinapp.site/ai-knowledge
