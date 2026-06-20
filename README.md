@@ -14,13 +14,15 @@ Connect the repo in Cloudflare Workers Builds with build command:
 npm ci && npm run build
 ```
 
-`/llms.txt` is proxied live from Aigent at `https://ai.spinapp.site/llms.txt` (Cloudflare middleware). No AI agent redirects.
+`/llms.txt` is proxied live from Aigent at `https://spinapp.aigent.host/llms.txt` (Cloudflare middleware). No AI agent redirects.
 
-Optional override — set `MORGON_PRESENCE_URL` in Cloudflare build/runtime variables to the Aigent base URL (no trailing slash), e.g.:
+Optional override — set `AIGENT_ORIGIN_URL` in Cloudflare build/runtime variables to the Aigent base URL (no trailing slash), e.g.:
 
 ```
-https://ai.spinapp.site
+https://spinapp.aigent.host
 ```
+
+When `ai.spinapp.site` DNS is fully wired, you can switch to `https://ai.spinapp.site`.
 
 No `wrangler.jsonc` needed for the marketing site.
 

@@ -7,7 +7,7 @@
 set -euo pipefail
 
 SITE="${SITE:-https://spinapp.site}"
-LLMS_ORIGIN="${LLMS_ORIGIN:-https://ai.spinapp.site}"
+LLMS_ORIGIN="${LLMS_ORIGIN:-https://spinapp.aigent.host}"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'

@@ -24,6 +24,6 @@
 # Live llms.txt from Aigent (ai.spinapp.site)
 [[redirects]]
   from = "/llms.txt"
-  to = "https://ai.spinapp.site/llms.txt"
+  to = "https://spinapp.aigent.host/llms.txt"
   status = 200
   force = true
