@@ -7,7 +7,7 @@
 set -euo pipefail
 
 SITE="${SITE:-https://spinapp.site}"
-MORGON_PRESENCE="${MORGON_PRESENCE:-https://transform-participant-portrait-francisco.trycloudflare.com/presence/marc-mckenzie}"
+MORGON_PRESENCE="${MORGON_PRESENCE:-https://transform-participant-portrait-francisco.trycloudflare.com/presence/spinapp}"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -38,7 +38,7 @@ fi
 body=$(curl -s "$SITE/llms.txt" | head -c 500)
 upstream=$(curl -s "$MORGON_PRESENCE/llms.txt" | head -c 500)
 
-if [[ -n "$body" && "$body" == "$upstream" ]]; then
+if [[ -n "$body" && "$body" == "$upstream" && "$body" == "# SpinApp"* ]]; then
   pass "Body matches Morgon llms.txt"
 else
   fail "Body mismatch with Morgon upstream"

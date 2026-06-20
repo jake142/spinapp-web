@@ -1,5 +1,5 @@
 const DEFAULT_MORGON_PRESENCE =
-  "https://transform-participant-portrait-francisco.trycloudflare.com/presence/marc-mckenzie";
+  "https://transform-participant-portrait-francisco.trycloudflare.com/presence/spinapp";
 
 const HOP_BY_HOP = new Set([
   "connection",
