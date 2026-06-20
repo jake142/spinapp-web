@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+# AI agents: official machine-readable knowledge
+# https://llmstxt.org/
+User-agent: GPTBot
+Allow: /llms.txt
+
+User-agent: ChatGPT-User
+Allow: /llms.txt
+
+User-agent: ClaudeBot
+Allow: /llms.txt
+
+User-agent: Google-Extended
+Allow: /llms.txt
+
+Sitemap: https://spinapp.site/llms.txt
