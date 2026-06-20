@@ -17,7 +17,8 @@ export async function proxyMorgon(
   options: { contentType?: string } = {},
 ): Promise<Response> {
   const incoming = new URL(request.url);
-  const target = new URL(path, `${morgonPresenceBase()}/`);
+  const base = morgonPresenceBase();
+  const target = new URL(`${base}${path}`);
   target.search = incoming.search;
 
   const upstream = await fetch(target.toString(), {
