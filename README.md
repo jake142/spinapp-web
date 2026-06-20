@@ -14,6 +14,14 @@ Connect the repo in Cloudflare Workers Builds with build command:
 npm ci && npm run build
 ```
 
+AI knowledge routes (`/llms.txt`, `/t/*.md`, `/search`) are proxied at runtime to Morgon via Worker endpoints — not `_redirects` (Cloudflare only allows relative proxy targets).
+
+Set `MORGON_PRESENCE_URL` in Cloudflare build/runtime variables when the tunnel URL changes, e.g.:
+
+```
+https://your-tunnel.trycloudflare.com/presence/spinapp
+```
+
 No `wrangler.jsonc` needed for the marketing site.
 
 ### Netlify (optional)

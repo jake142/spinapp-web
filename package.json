@@ -17,6 +17,7 @@
     "sync-release": "node scripts/sync-release.mjs"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^13.0.0",
     "@netlify/blobs": "^10.0.0",
     "@tailwindcss/vite": "^4.3.1",
     "astro": "^6.4.7",
