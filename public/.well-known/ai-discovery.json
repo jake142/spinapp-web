@@ -1,9 +1,0 @@
-{
-  "provider": "morgon",
-  "endpoint": "https://emission-excellence-moses-detect.trycloudflare.com/presence/spinapp",
-  "mcp": "https://emission-excellence-moses-detect.trycloudflare.com/presence/spinapp/mcp",
-  "canonical": "https://emission-excellence-moses-detect.trycloudflare.com/presence/spinapp",
-  "ai_catalog": "https://emission-excellence-moses-detect.trycloudflare.com/presence/spinapp/well-known/ai-catalog.json",
-  "name": "SpinApp",
-  "website": "https://spinapp.site"
-}

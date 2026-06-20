@@ -20,9 +20,3 @@
   from = "/download"
   to = "/.netlify/functions/track-download"
   status = 200
-
-[[headers]]
-  for = "/.well-known/*"
-  [headers.values]
-    Content-Type = "application/json"
-    Access-Control-Allow-Origin = "*"
