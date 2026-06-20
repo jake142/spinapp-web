@@ -16,6 +16,8 @@ npm ci && npm run build
 
 AI knowledge routes (`/llms.txt`, `/t/*.md`, `/search`) are proxied at runtime to Morgon via Worker endpoints — not `_redirects` (Cloudflare only allows relative proxy targets).
 
+AI agents (GPTBot, ChatGPT, Claude, `Go-http-client`, etc.) hitting the marketing homepage are redirected to `/llms.txt` so they read Morgon knowledge instead of scraping HTML.
+
 Set `MORGON_PRESENCE_URL` in Cloudflare build/runtime variables when the tunnel URL changes, e.g.:
 
 ```
