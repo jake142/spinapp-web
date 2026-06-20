@@ -14,7 +14,7 @@ Connect the repo in Cloudflare Workers Builds with build command:
 npm ci && npm run build
 ```
 
-`/llms.txt` is proxied live from Aigent at `https://spinapp.aigent.host/llms.txt` (Cloudflare middleware). No AI agent redirects.
+`/llms.txt` and `/llms-full.txt` on the marketing site are proxied live from Aigent. On `ai.spinapp.site`, all AI paths (`/full`, `/t/*`, `/search`, etc.) proxy to Aigent (Cloudflare middleware). No AI agent redirects.
 
 Optional override — set `AIGENT_ORIGIN_URL` in Cloudflare build/runtime variables to the Aigent base URL (no trailing slash), e.g.:
 

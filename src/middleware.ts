@@ -1,11 +1,12 @@
 import { defineMiddleware } from "astro:middleware";
-import { proxyLlmsTxt } from "./lib/aigent";
+import { proxyAigent, shouldProxyToAigent } from "./lib/aigent";
 
 export const onRequest = defineMiddleware(async (context, next) => {
-  const pathname = new URL(context.request.url).pathname;
+  const url = new URL(context.request.url);
+  const host = url.hostname;
 
-  if (pathname === "/llms.txt") {
-    return proxyLlmsTxt(context.request);
+  if (shouldProxyToAigent(url.pathname, host)) {
+    return proxyAigent(context.request);
   }
 
   return next();

@@ -11,6 +11,17 @@ const HOP_BY_HOP = new Set([
   "proxy-authenticate",
 ]);
 
+const AIGENT_PROXY_PREFIXES = [
+  "/llms.txt",
+  "/llms-full.txt",
+  "/full",
+  "/search",
+  "/t/",
+  "/.well-known/ai.json",
+  "/sitemap.xml",
+  "/robots.txt",
+];
+
 /** Aigent AI site base URL (no trailing slash). Override via AIGENT_ORIGIN_URL in Cloudflare. */
 export function aigentOriginUrl(): string {
   const configured = import.meta.env.AIGENT_ORIGIN_URL;
@@ -22,32 +33,50 @@ export function aigentOriginUrl(): string {
   return DEFAULT_AIGENT_ORIGIN;
 }
 
-export function aigentLlmsUrl(): string {
-  return `${aigentOriginUrl()}/llms.txt`;
+export function isAiSubdomain(host: string): boolean {
+  return host === "ai.spinapp.site" || host.startsWith("ai.");
 }
 
-/** Proxy live llms.txt from Aigent — URL stays spinapp.site/llms.txt (status 200, not redirect). */
-export async function proxyLlmsTxt(request: Request): Promise<Response> {
+export function shouldProxyToAigent(pathname: string, host: string): boolean {
+  const matchesPrefix =
+    pathname === "/" ||
+    AIGENT_PROXY_PREFIXES.some(
+      (prefix) => pathname === prefix || pathname.startsWith(prefix),
+    );
+
+  if (isAiSubdomain(host)) {
+    return matchesPrefix;
+  }
+
+  // Main marketing site — brief llms files only on root domain.
+  return pathname === "/llms.txt" || pathname === "/llms-full.txt";
+}
+
+/** Proxy Aigent AI endpoints — path preserved, URL stays on spinapp.site / ai.spinapp.site. */
+export async function proxyAigent(request: Request): Promise<Response> {
+  const incoming = new URL(request.url);
+  const upstreamUrl = `${aigentOriginUrl()}${incoming.pathname}${incoming.search}`;
+
   let upstream: Response;
 
   try {
-    upstream = await fetch(aigentLlmsUrl(), {
+    upstream = await fetch(upstreamUrl, {
       headers: {
-        Accept: request.headers.get("Accept") ?? "text/plain, */*",
+        Accept: request.headers.get("Accept") ?? "text/html, text/plain, */*",
       },
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "fetch failed";
 
-    return new Response(`llms.txt unavailable: ${message}`, {
+    return new Response(`Aigent proxy unavailable: ${message}`, {
       status: 502,
       headers: { "Content-Type": "text/plain; charset=utf-8" },
     });
   }
 
   if (!upstream.ok) {
-    return new Response(`llms.txt upstream returned ${upstream.status}`, {
-      status: 502,
+    return new Response(`Aigent upstream returned ${upstream.status} for ${incoming.pathname}`, {
+      status: upstream.status === 404 ? 404 : 502,
       headers: { "Content-Type": "text/plain; charset=utf-8" },
     });
   }
@@ -67,4 +96,13 @@ export async function proxyLlmsTxt(request: Request): Promise<Response> {
     statusText: upstream.statusText,
     headers,
   });
+}
+
+/** @deprecated Use proxyAigent — kept for callers that only need llms.txt */
+export async function proxyLlmsTxt(request: Request): Promise<Response> {
+  return proxyAigent(request);
+}
+
+export function aigentLlmsUrl(): string {
+  return `${aigentOriginUrl()}/llms.txt`;
 }

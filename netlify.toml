@@ -21,9 +21,15 @@
   to = "/.netlify/functions/track-download"
   status = 200
 
-# Live llms.txt from Aigent (ai.spinapp.site)
+# Live llms.txt from Aigent
 [[redirects]]
   from = "/llms.txt"
   to = "https://spinapp.aigent.host/llms.txt"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/llms-full.txt"
+  to = "https://spinapp.aigent.host/llms-full.txt"
   status = 200
   force = true
