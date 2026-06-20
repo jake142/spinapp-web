@@ -1,3 +1,4 @@
 /llms.txt
   Content-Type: text/markdown; charset=utf-8
   Access-Control-Allow-Origin: *
+  Cache-Control: no-cache, must-revalidate
