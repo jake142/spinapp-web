@@ -6,8 +6,8 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "predev": "node scripts/sync-release.mjs",
-    "prebuild": "node scripts/sync-release.mjs",
+    "predev": "node scripts/sync-release.mjs && node scripts/sync-llms-txt.mjs",
+    "prebuild": "node scripts/sync-release.mjs && node scripts/sync-llms-txt.mjs",
     "dev": "astro dev",
     "dev:netlify": "netlify dev",
     "build": "astro build",

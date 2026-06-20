@@ -2,6 +2,7 @@
 dist/
 .wrangler/
 worker-configuration.d.ts
+public/llms.txt
 # generated types
 .astro/
 
