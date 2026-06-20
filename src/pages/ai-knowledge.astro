@@ -9,15 +9,6 @@ const { status, body } = await fetchMorgonText("/llms.txt", Astro.request);
 if (status !== 200) {
   return new Response("AI knowledge is temporarily unavailable.", { status });
 }
-
-function escapeHtml(text: string): string {
-  return text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
-}
-
-const escaped = escapeHtml(body);
 ---
 
 <Layout
@@ -34,7 +25,7 @@ const escaped = escapeHtml(body);
       <a href="/llms.txt" class="text-white/75 underline underline-offset-2 hover:text-white">/llms.txt</a>
     </p>
     <article class="rounded-2xl border border-white/10 bg-white/5 p-6 overflow-x-auto">
-      <pre class="text-sm leading-relaxed text-white/80 whitespace-pre-wrap font-mono">{escaped}</pre>
+      <pre class="text-sm leading-relaxed text-white/80 whitespace-pre-wrap font-mono" set:text={body} />
     </article>
   </main>
 </Layout>
