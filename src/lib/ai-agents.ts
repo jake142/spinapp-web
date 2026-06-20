@@ -1,5 +1,5 @@
 const AI_AGENT_PATTERN =
-  /gptbot|chatgpt|oai-searchbot|claudebot|claude-web|anthropic|google-extended|google-agent|googleother|\bgemini\b|\bbard\b|bytespider|ccbot|cohere-ai|perplexity|go-http-client|applebot-extended|meta-externalagent|xai-searchbot|grokbot|x-ai-grok|grok-deepsearch/i;
+  /gptbot|chatgpt|oai-searchbot|claudebot|claude-web|claude-user|anthropic|google-extended|google-agent|googleother|\bgemini\b|\bbard\b|bytespider|tiktokspider|ccbot|cohere-ai|perplexitybot|perplexity-user|perplexity|go-http-client|applebot-extended|applebot|meta-externalagent|facebookexternalhit|xai-searchbot|grokbot|x-ai-grok|grok-deepsearch|bingbot|bingpreview|duckassistbot|duckduckbot|petalbot|amazonbot|youbot|github-copilot|copilot/i;
 
 const DEFAULT_MORGON_PRESENCE =
   "https://federation-mount-cookies-hearings.trycloudflare.com/presence/spinapp";
