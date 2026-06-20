@@ -2,12 +2,12 @@
 # Verify spinapp.site/llms.txt proxies Morgon content (200, not redirect).
 # Usage:
 #   ./scripts/test-llms-txt.sh
-#   MORGON_PRESENCE=https://….trycloudflare.com/presence/spinapp ./scripts/test-llms-txt.sh
+#   MORGON_PRESENCE=https://….trycloudflare.com/presence/marc-mckenzie ./scripts/test-llms-txt.sh
 
 set -euo pipefail
 
 SITE="${SITE:-https://spinapp.site}"
-MORGON_PRESENCE="${MORGON_PRESENCE:-https://tunes-appropriate-dispatched-exports.trycloudflare.com/presence/spinapp}"
+MORGON_PRESENCE="${MORGON_PRESENCE:-https://tunes-appropriate-dispatched-exports.trycloudflare.com/presence/marc-mckenzie}"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -38,10 +38,10 @@ fi
 body=$(curl -s "$SITE/llms.txt" | head -c 500)
 upstream=$(curl -s "$MORGON_PRESENCE/llms.txt" | head -c 500)
 
-if [[ "$body" == *"SpinApp"* && "$body" == "$upstream" ]]; then
+if [[ -n "$body" && "$body" == "$upstream" ]]; then
   pass "Body matches Morgon llms.txt"
 else
-  fail "Body mismatch or missing SpinApp content"
+  fail "Body mismatch with Morgon upstream"
 fi
 
 echo ""

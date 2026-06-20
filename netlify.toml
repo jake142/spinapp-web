@@ -24,6 +24,6 @@
 # Live llms.txt from Morgon (update URL when tunnel rotates)
 [[redirects]]
   from = "/llms.txt"
-  to = "https://tunes-appropriate-dispatched-exports.trycloudflare.com/presence/spinapp/llms.txt"
+  to = "https://tunes-appropriate-dispatched-exports.trycloudflare.com/presence/marc-mckenzie/llms.txt"
   status = 200
   force = true
