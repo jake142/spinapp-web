@@ -1,8 +1,16 @@
 const AI_AGENT_PATTERN =
-  /gptbot|chatgpt|oai-searchbot|claudebot|claude-web|anthropic|google-extended|bytespider|ccbot|cohere-ai|perplexity|go-http-client|applebot-extended|meta-externalagent/i;
+  /gptbot|chatgpt|oai-searchbot|claudebot|claude-web|anthropic|google-extended|google-agent|googleother|\bgemini\b|\bbard\b|bytespider|ccbot|cohere-ai|perplexity|go-http-client|applebot-extended|meta-externalagent|xai-searchbot|grokbot|x-ai-grok|grok-deepsearch/i;
 
 const DEFAULT_MORGON_PRESENCE =
   "https://federation-mount-cookies-hearings.trycloudflare.com/presence/spinapp";
+
+/** Paths that should always route to Morgon — even for human Chrome UAs (Gemini browser reads these). */
+const MORGON_DISCOVERY_PATHS = new Set([
+  "/llms.txt",
+  "/llms-full.txt",
+  "/ai.txt",
+  "/.well-known/ai.txt",
+]);
 
 export function morgonPresenceUrl(): string {
   const configured = import.meta.env.MORGON_PRESENCE_URL;
@@ -12,6 +20,10 @@ export function morgonPresenceUrl(): string {
   }
 
   return DEFAULT_MORGON_PRESENCE;
+}
+
+export function morgonLlmsUrl(): string {
+  return `${morgonPresenceUrl()}/llms.txt`;
 }
 
 export function isAiAgent(request: Request): boolean {
@@ -29,7 +41,19 @@ export function isAiAgent(request: Request): boolean {
   );
 }
 
+export function isMorgonDiscoveryPath(pathname: string): boolean {
+  const normalized = pathname.endsWith("/") && pathname.length > 1
+    ? pathname.slice(0, -1)
+    : pathname;
+
+  return MORGON_DISCOVERY_PATHS.has(normalized);
+}
+
 export function shouldRedirectToMorgon(pathname: string): boolean {
+  if (isMorgonDiscoveryPath(pathname)) {
+    return true;
+  }
+
   if (pathname.startsWith("/_astro/") || pathname.startsWith("/downloads/")) {
     return false;
   }
@@ -45,4 +69,16 @@ export function shouldRedirectToMorgon(pathname: string): boolean {
   }
 
   return true;
+}
+
+export function redirectTarget(pathname: string): string {
+  if (pathname === "/llms.txt" || pathname === "/llms-full.txt") {
+    return morgonLlmsUrl();
+  }
+
+  if (pathname === "/ai.txt" || pathname === "/.well-known/ai.txt") {
+    return `${morgonPresenceUrl()}/.well-known/ai.json`;
+  }
+
+  return morgonPresenceUrl();
 }
