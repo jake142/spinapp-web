@@ -20,3 +20,15 @@
   from = "/download"
   to = "/.netlify/functions/track-download"
   status = 200
+
+[[redirects]]
+  from = "/llms.txt"
+  to = "https://federation-mount-cookies-hearings.trycloudflare.com/presence/spinapp/llms.txt"
+  status = 200
+  force = true
+
+[[headers]]
+  for = "/llms.txt"
+  [headers.values]
+    Content-Type = "text/markdown; charset=utf-8"
+    Access-Control-Allow-Origin = "*"
