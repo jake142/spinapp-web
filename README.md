@@ -14,9 +14,7 @@ Connect the repo in Cloudflare Workers Builds with build command:
 npm ci && npm run build
 ```
 
-AI agents visiting the marketing site are redirected to the Morgon presence URL (`MORGON_PRESENCE_URL`).
-
-No `wrangler.jsonc` needed for the marketing site.
+`/llms.txt` is proxied live from Morgon (Cloudflare middleware). No AI agent redirects.
 
 Set `MORGON_PRESENCE_URL` in Cloudflare build/runtime variables when the tunnel URL changes, e.g.:
 
