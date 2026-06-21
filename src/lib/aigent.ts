@@ -47,6 +47,11 @@ export async function proxyAigent(request: Request): Promise<Response> {
     request.headers.get('Accept') ?? 'text/html, text/plain, */*',
   );
 
+  const userAgent = request.headers.get('User-Agent');
+  if (userAgent) {
+    requestHeaders.set('User-Agent', userAgent);
+  }
+
   // Laravel uses the public AI host for links in HTML / llms.txt.
   if (incoming.hostname !== origin.hostname) {
     requestHeaders.set('X-Forwarded-Host', incoming.hostname);
