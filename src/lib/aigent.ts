@@ -52,6 +52,11 @@ export async function proxyAigent(request: Request): Promise<Response> {
     requestHeaders.set('User-Agent', userAgent);
   }
 
+  const signatureAgent = request.headers.get('Signature-Agent');
+  if (signatureAgent) {
+    requestHeaders.set('Signature-Agent', signatureAgent);
+  }
+
   // Laravel uses the public AI host for links in HTML / llms.txt.
   if (incoming.hostname !== origin.hostname) {
     requestHeaders.set('X-Forwarded-Host', incoming.hostname);
