@@ -1,6 +1,6 @@
 ## Deploy
 
-Static Astro output in `dist/`. Works on Cloudflare Workers, Netlify, or any static host.
+Astro site on Cloudflare Workers. Also works on Netlify or any static host.
 
 ### Download counter
 
@@ -8,13 +8,31 @@ The live counter uses a hosted counting API from the browser — no server setup
 
 ### Cloudflare Workers (production)
 
-Connect the repo in Cloudflare Workers Builds with build command:
+Connect the repo in Cloudflare Workers Builds:
 
 ```bash
 npm ci && npm run build
 ```
 
-No `wrangler.jsonc` needed for the marketing site.
+#### Aigent AI proxy
+
+This site proxies AI content from Aigent to `ai.spinapp.site` and `/llms.txt` on the root domain.
+
+**DNS** — CNAME `ai` → `spinapp.site`, proxied (orange).
+
+**Worker route** — Domains → Add Route `*.spinapp.site/*` (or `ai.spinapp.site/*`). Custom Domain UI often fails; route works.
+
+**Env var** — Workers → Settings → Variables:
+
+```
+AIGENT_ORIGIN_URL = https://spinapp.aigent.host
+```
+
+Not `https://ai.spinapp.site` — that loops.
+
+**Code** — `src/lib/aigent.ts` + `src/middleware.ts` (already in repo). Redeploy after changes.
+
+Test: `https://ai.spinapp.site/llms.txt` and `https://spinapp.site/llms.txt` should return 200.
 
 ### Netlify (optional)
 

@@ -34,7 +34,7 @@ export function aigentOriginUrl(): string {
 }
 
 export function isAiSubdomain(host: string): boolean {
-  return host === 'ai.spinapp.site' || host.startsWith('ai.');
+  return host.startsWith('ai.');
 }
 
 export function shouldProxyToAigent(pathname: string, host: string): boolean {
