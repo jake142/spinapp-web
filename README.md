@@ -20,7 +20,7 @@ SpinApp is the **traffic guard** in front of Aigent. The worker proxies:
 
 | Host | What gets proxied |
 |------|-------------------|
-| `spinapp.site` | `/llms.txt`, `/llms-full.txt` only |
+| `spinapp.site` | `/llms.txt`, `/llms-full.txt`, `/robots.txt`, `/sitemap.xml`; with `AIGENT_BOT_SPLIT=true` also **all paths** for AI crawlers (see below) |
 | `ai.spinapp.site` | **Everything** except `/_astro/*` |
 
 Upstream origin: `https://spinapp.aigent.host` (not `ai.spinapp.site` — that loops).
@@ -32,6 +32,25 @@ Upstream origin: `https://spinapp.aigent.host` (not `ai.spinapp.site` — that l
 3. **Env var** — `AIGENT_ORIGIN_URL` = `https://spinapp.aigent.host`
 4. **Deploy** — push to `main`, wait for Workers build
 5. **One-time purge** — Caching → Custom Purge → `https://ai.spinapp.site/robots.txt`
+
+#### Bot-split test (optional)
+
+When `AIGENT_BOT_SPLIT=true` on the Workers project, AI crawlers hitting **`spinapp.site`** get proxied Aigent HTML (same URL, no redirect). Traditional indexers still see the marketing site.
+
+| User-Agent | Behavior on `spinapp.site` |
+|------------|----------------------------|
+| `Googlebot`, `Bingbot` | Marketing site (SEO) |
+| `Google-Extended`, `GPTBot`, `ChatGPT-User`, `ClaudeBot`, `anthropic-ai`, `PerplexityBot` | Proxied Aigent content |
+
+Set in Cloudflare Workers → Settings → Variables: `AIGENT_BOT_SPLIT` = `true`. To roll back, delete the variable or set `false` and redeploy.
+
+```bash
+# AI bot → Aigent HTML on marketing domain
+curl -sI https://spinapp.site/ -A "GPTBot/1.0" | head -5
+
+# Indexer → Astro marketing
+curl -sI https://spinapp.site/ -A "Mozilla/5.0 (compatible; Googlebot/2.1)" | head -5
+```
 
 **Test:**
 

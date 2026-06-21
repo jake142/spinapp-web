@@ -1,4 +1,13 @@
+import { isAiRouterBot, isBotSplitEnabled, isSearchIndexerBot } from './aigent-bots';
+
 const DEFAULT_AIGENT_ORIGIN = 'https://spinapp.aigent.host';
+
+const DISCOVERY_FILES = new Set([
+  '/robots.txt',
+  '/sitemap.xml',
+  '/llms.txt',
+  '/llms-full.txt',
+]);
 
 const HOP_BY_HOP = new Set([
   'connection',
@@ -26,18 +35,37 @@ export function isAiSubdomain(host: string): boolean {
   return host.startsWith('ai.');
 }
 
-export function shouldProxyToAigent(pathname: string, host: string): boolean {
+function isDiscoveryFile(pathname: string): boolean {
+  return DISCOVERY_FILES.has(pathname);
+}
+
+function isWorkerStaticPath(pathname: string): boolean {
+  return pathname.startsWith('/_astro/');
+}
+
+export function shouldProxyToAigent(
+  pathname: string,
+  host: string,
+  userAgent?: string | null,
+): boolean {
   if (isAiSubdomain(host)) {
-    return !pathname.startsWith('/_astro/');
+    return !isWorkerStaticPath(pathname);
   }
 
-  // Main marketing site — llms + discovery files; ai.* is fully proxied above.
-  return (
-    pathname === '/llms.txt' ||
-    pathname === '/llms-full.txt' ||
-    pathname === '/robots.txt' ||
-    pathname === '/sitemap.xml'
-  );
+  if (isDiscoveryFile(pathname)) {
+    return true;
+  }
+
+  if (
+    isBotSplitEnabled() &&
+    userAgent &&
+    !isSearchIndexerBot(userAgent) &&
+    isAiRouterBot(userAgent)
+  ) {
+    return !isWorkerStaticPath(pathname);
+  }
+
+  return false;
 }
 
 /** Proxy Aigent AI endpoints — path preserved, URL stays on spinapp.site / ai.spinapp.site. */
@@ -102,22 +130,29 @@ export async function proxyAigent(request: Request): Promise<Response> {
     responseHeaders.set(key, value);
   }
 
+  const pathname = incoming.pathname;
+  const onMarketingRoot = !isAiSubdomain(incoming.hostname);
+  const botSplitRoute =
+    onMarketingRoot && isBotSplitEnabled() && isDiscoveryFile(pathname) === false;
+
   if (isAiSubdomain(incoming.hostname)) {
     responseHeaders.delete('etag');
 
-    if (incoming.pathname === '/robots.txt' || incoming.pathname === '/sitemap.xml') {
+    if (pathname === '/robots.txt' || pathname === '/sitemap.xml') {
       responseHeaders.set('Cache-Control', 'no-store');
       responseHeaders.set('CDN-Cache-Control', 'no-store');
     } else {
       responseHeaders.set('Cache-Control', 'public, max-age=300, must-revalidate');
       responseHeaders.set('CDN-Cache-Control', 'max-age=300');
     }
-  } else if (
-    incoming.pathname === '/robots.txt' ||
-    incoming.pathname === '/sitemap.xml'
-  ) {
+  } else if (pathname === '/robots.txt' || pathname === '/sitemap.xml') {
     responseHeaders.delete('etag');
     responseHeaders.set('Cache-Control', 'no-store');
+    responseHeaders.set('CDN-Cache-Control', 'no-store');
+  } else if (botSplitRoute) {
+    responseHeaders.delete('etag');
+    responseHeaders.set('Vary', 'User-Agent');
+    responseHeaders.set('Cache-Control', 'private, no-store');
     responseHeaders.set('CDN-Cache-Control', 'no-store');
   }
 

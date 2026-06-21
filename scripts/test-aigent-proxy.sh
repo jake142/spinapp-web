@@ -45,5 +45,22 @@ else
   fail "spinapp.site/llms.txt unexpected content"
 fi
 
+if [[ "${BOT_SPLIT_TEST:-0}" == "1" ]]; then
+  echo ""
+  echo "=== Bot-split (requires AIGENT_BOT_SPLIT=true in Cloudflare) ==="
+  ai_html=$(curl -s "$MARKETING/" -A "GPTBot/1.0" | head -c 400)
+  if echo "$ai_html" | grep -q "official AI knowledge summary"; then
+    pass "GPTBot on spinapp.site/ gets Aigent HTML"
+  else
+    fail "GPTBot on spinapp.site/ did not get Aigent HTML — is AIGENT_BOT_SPLIT enabled?"
+  fi
+  mkt_html=$(curl -s "$MARKETING/" -A "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" | head -c 400)
+  if echo "$mkt_html" | grep -q "Laravel local dev"; then
+    pass "Googlebot on spinapp.site/ gets marketing HTML"
+  else
+    fail "Googlebot on spinapp.site/ did not get marketing HTML"
+  fi
+fi
+
 echo ""
 echo -e "${GREEN}Aigent integration OK.${NC}"
