@@ -11,17 +11,6 @@ const HOP_BY_HOP = new Set([
   'proxy-authenticate',
 ]);
 
-const AIGENT_PROXY_PREFIXES = [
-  '/llms.txt',
-  '/llms-full.txt',
-  '/full',
-  '/search',
-  '/t/',
-  '/.well-known/ai.json',
-  '/sitemap.xml',
-  '/robots.txt',
-];
-
 /** Aigent AI site base URL (no trailing slash). Override via AIGENT_ORIGIN_URL in Cloudflare. */
 export function aigentOriginUrl(): string {
   const configured = import.meta.env.AIGENT_ORIGIN_URL;
@@ -38,14 +27,8 @@ export function isAiSubdomain(host: string): boolean {
 }
 
 export function shouldProxyToAigent(pathname: string, host: string): boolean {
-  const matchesPrefix =
-    pathname === '/' ||
-    AIGENT_PROXY_PREFIXES.some(
-      (prefix) => pathname === prefix || pathname.startsWith(prefix),
-    );
-
   if (isAiSubdomain(host)) {
-    return matchesPrefix;
+    return !pathname.startsWith('/_astro/');
   }
 
   // Main marketing site — brief llms files only on root domain.
