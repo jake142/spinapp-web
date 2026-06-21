@@ -97,6 +97,13 @@ export async function proxyAigent(request: Request): Promise<Response> {
     responseHeaders.set(key, value);
   }
 
+  // Avoid stale edge cache (e.g. old static robots.txt stub on ai.spinapp.site).
+  if (isAiSubdomain(incoming.hostname)) {
+    responseHeaders.delete('etag');
+    responseHeaders.set('Cache-Control', 'public, max-age=300, must-revalidate');
+    responseHeaders.set('CDN-Cache-Control', 'max-age=300');
+  }
+
   return new Response(upstream.body, {
     status: upstream.status,
     statusText: upstream.statusText,
