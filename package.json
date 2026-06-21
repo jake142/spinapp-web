@@ -12,7 +12,7 @@
     "dev:netlify": "netlify dev",
     "build": "astro build",
     "preview": "astro preview",
-    "deploy:cf": "npm run build && wrangler deploy --config dist/server/wrangler.json",
+    "deploy": "npm run build && wrangler deploy --config dist/server/wrangler.json",
     "deploy:netlify": "npm run build && netlify deploy --prod",
     "astro": "astro",
     "sync-release": "node scripts/sync-release.mjs"

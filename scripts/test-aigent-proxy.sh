@@ -47,7 +47,7 @@ fi
 
 if [[ "${BOT_SPLIT_TEST:-0}" == "1" ]]; then
   echo ""
-  echo "=== Bot-split (AIGENT_BOT_SPLIT in wrangler.jsonc) ==="
+  echo "=== Bot-split ==="
   ai_headers=$(curl -sI "$MARKETING/" -A "GPTBot/1.0")
   if echo "$ai_headers" | grep -qi "x-aigent-managed"; then
     pass "GPTBot on spinapp.site/ gets Aigent proxy (x-aigent-managed)"

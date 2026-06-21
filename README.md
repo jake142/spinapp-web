@@ -15,9 +15,13 @@ Connect the repo in Cloudflare Workers Builds:
 | **Build command** | `npm ci && npm run build` |
 | **Deploy command** | `npx wrangler deploy --config dist/server/wrangler.json` |
 
-Do **not** run bare `npx wrangler deploy` — it reads root `wrangler.jsonc` (vars only) and fails. Astro merges those vars into `dist/server/wrangler.json` during build; deploy must use that file.
+If deploy runs alone (no build step), use one command:
 
-Env vars live in `wrangler.jsonc` (merged at build time). Dashboard Variables get wiped on deploy.
+| Setting | Value |
+|---------|-------|
+| **Deploy command** | `npm run deploy` |
+
+**Do not add `wrangler.jsonc` with only vars** — bare `npx wrangler deploy` reads it and fails. Aigent env is in `astro.config.mjs` (build-time). Bot-split defaults on in code if unset.
 
 #### Aigent AI proxy
 
@@ -25,7 +29,7 @@ SpinApp is the **traffic guard** in front of Aigent. The worker proxies:
 
 | Host | What gets proxied |
 |------|-------------------|
-| `spinapp.site` | `/llms.txt`, `/llms-full.txt`, `/robots.txt`, `/sitemap.xml`; with `AIGENT_BOT_SPLIT=true` also **all paths** for AI crawlers (see below) |
+| `spinapp.site` | `/llms.txt`, `/llms-full.txt`, `/robots.txt`, `/sitemap.xml`; with bot-split also **all paths** for AI crawlers (see below) |
 | `ai.spinapp.site` | **Everything** except `/_astro/*` |
 
 Upstream origin: `https://spinapp.aigent.host` (not `ai.spinapp.site` — that loops).
@@ -40,14 +44,14 @@ Upstream origin: `https://spinapp.aigent.host` (not `ai.spinapp.site` — that l
 
 #### Bot-split (enabled by default)
 
-`AIGENT_BOT_SPLIT=true` in `wrangler.jsonc` — AI crawlers hitting **`spinapp.site`** get proxied Aigent HTML (same URL, no redirect). Traditional indexers still see the marketing site.
+Bot-split is on by default (`AIGENT_BOT_SPLIT` in `astro.config.mjs`, overridable at build time). AI crawlers hitting **`spinapp.site`** get proxied Aigent HTML (same URL, no redirect). Traditional indexers still see the marketing site.
 
 | User-Agent | Behavior on `spinapp.site` |
 |------------|----------------------------|
 | `Googlebot`, `Bingbot` | Marketing site (SEO) |
 | `Google-Extended`, `GPTBot`, `ChatGPT-User`, `ClaudeBot`, `anthropic-ai`, `PerplexityBot` | Proxied Aigent content |
 
-To disable: set `AIGENT_BOT_SPLIT` to `false` in `wrangler.jsonc` and redeploy.
+To disable: set `AIGENT_BOT_SPLIT=false` in `astro.config.mjs` and redeploy.
 
 ```bash
 # AI bot → Aigent HTML on marketing domain
