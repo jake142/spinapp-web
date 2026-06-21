@@ -1,26 +1,2 @@
 User-agent: *
 Allow: /
-
-# AI knowledge index (llms.txt standard)
-# https://spinapp.site/llms.txt
-
-User-agent: GPTBot
-Allow: /
-
-User-agent: Google-Extended
-Allow: /
-
-User-agent: GoogleOther
-Allow: /
-
-User-agent: Gemini-Deep-Research
-Allow: /
-
-User-agent: xAI-SearchBot
-Allow: /
-
-User-agent: Grok
-Allow: /
-
-User-agent: xAI
-Allow: /
