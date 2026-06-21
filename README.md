@@ -29,20 +29,20 @@ Upstream origin: `https://spinapp.aigent.host` (not `ai.spinapp.site` — that l
 
 1. **DNS** — `ai` CNAME → `spinapp.site`, **proxied (orange cloud)**
 2. **Worker route** — `*.spinapp.site/*` or `ai.spinapp.site/*` on the Workers project
-3. **Env var** — `AIGENT_ORIGIN_URL` = `https://spinapp.aigent.host`
+3. **Env vars** — defined in `wrangler.jsonc` (survives deploy; dashboard copies get wiped)
 4. **Deploy** — push to `main`, wait for Workers build
 5. **One-time purge** — Caching → Custom Purge → `https://ai.spinapp.site/robots.txt`
 
-#### Bot-split test (optional)
+#### Bot-split (enabled by default)
 
-When `AIGENT_BOT_SPLIT=true` on the Workers project, AI crawlers hitting **`spinapp.site`** get proxied Aigent HTML (same URL, no redirect). Traditional indexers still see the marketing site.
+`AIGENT_BOT_SPLIT=true` in `wrangler.jsonc` — AI crawlers hitting **`spinapp.site`** get proxied Aigent HTML (same URL, no redirect). Traditional indexers still see the marketing site.
 
 | User-Agent | Behavior on `spinapp.site` |
 |------------|----------------------------|
 | `Googlebot`, `Bingbot` | Marketing site (SEO) |
 | `Google-Extended`, `GPTBot`, `ChatGPT-User`, `ClaudeBot`, `anthropic-ai`, `PerplexityBot` | Proxied Aigent content |
 
-Set in Cloudflare Workers → Settings → Variables: `AIGENT_BOT_SPLIT` = `true`. To roll back, delete the variable or set `false` and redeploy.
+To disable: set `AIGENT_BOT_SPLIT` to `false` in `wrangler.jsonc` and redeploy.
 
 ```bash
 # AI bot → Aigent HTML on marketing domain

@@ -1,0 +1,8 @@
+{
+  "name": "spinapp-web",
+  "keep_vars": true,
+  "vars": {
+    "AIGENT_ORIGIN_URL": "https://spinapp.aigent.host",
+    "AIGENT_BOT_SPLIT": "true"
+  }
+}
