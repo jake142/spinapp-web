@@ -10,17 +10,14 @@ The live counter uses a hosted counting API from the browser — no server setup
 
 Connect the repo in Cloudflare Workers Builds:
 
-```bash
-npm ci && npm run build
-```
+| Setting | Value |
+|---------|-------|
+| **Build command** | `npm ci && npm run build` |
+| **Deploy command** | `npx wrangler deploy --config dist/server/wrangler.json` |
 
-Deploy command (if separate from build):
+Do **not** run bare `npx wrangler deploy` — it reads root `wrangler.jsonc` (vars only) and fails. Astro merges those vars into `dist/server/wrangler.json` during build; deploy must use that file.
 
-```bash
-npx wrangler deploy
-```
-
-Env vars live in `wrangler.jsonc` — do not rely on dashboard Variables (Wrangler wipes them on deploy).
+Env vars live in `wrangler.jsonc` (merged at build time). Dashboard Variables get wiped on deploy.
 
 #### Aigent AI proxy
 

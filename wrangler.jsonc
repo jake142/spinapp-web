@@ -1,12 +1,5 @@
 {
   "name": "spinapp-web",
-  "main": "@astrojs/cloudflare/entrypoints/server",
-  "compatibility_date": "2026-06-18",
-  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
-  "assets": {
-    "directory": "./dist",
-    "binding": "ASSETS"
-  },
   "keep_vars": true,
   "vars": {
     "AIGENT_ORIGIN_URL": "https://spinapp.aigent.host",
