@@ -36,8 +36,8 @@ AI crawlers on **`spinapp.site`** get proxied Aigent HTML (same URL, no redirect
 
 | User-Agent | `spinapp.site` |
 |------------|----------------|
-| `Googlebot`, `Bingbot` | Marketing site |
-| `Google`, `Google-Agent`, `Google-Extended`, `GPTBot`, `ChatGPT-User`, `ClaudeBot`, `anthropic-ai`, `PerplexityBot` | Aigent proxy |
+| `Googlebot`, `Bingbot`, `DuckDuckBot` | Marketing site |
+| `Google`, `Google-Agent`, `Google-Extended`, `GPTBot`, `ChatGPT-User`, `OAI-SearchBot`, `ClaudeBot`, `Claude-User`, `anthropic-ai`, `PerplexityBot`, `Perplexity-User`, `xAI-SearchBot`, `GrokBot`, `DeepSeekBot`, `Applebot-Extended`, `Meta-ExternalAgent`, `Bytespider`, `CCBot`, `Amazonbot`, `YouBot`, `DuckAssistBot`, `Cohere-AI`, `PetalBot`, `GitHub-Copilot`, `Cursor` | Aigent proxy |
 
 **Test:**
 
