@@ -48,15 +48,17 @@ fi
 if [[ "${BOT_SPLIT_TEST:-0}" == "1" ]]; then
   echo ""
   echo "=== Bot-split ==="
-  ai_headers=$(curl -sI "$MARKETING/" -A "GPTBot/1.0")
-  if echo "$ai_headers" | grep -qi "x-aigent-managed"; then
-    pass "GPTBot on spinapp.site/ gets Aigent proxy (x-aigent-managed)"
-  else
-    fail "GPTBot on spinapp.site/ did not get Aigent proxy — check wrangler.jsonc deploy"
-  fi
+  for ua in "GPTBot/1.0" "Google" "Google-Extended"; do
+    ai_headers=$(curl -sI "$MARKETING/" -A "$ua")
+    if echo "$ai_headers" | grep -qi "x-aigent-managed"; then
+      pass "$ua on spinapp.site/ → Aigent proxy"
+    else
+      fail "$ua on spinapp.site/ did not get Aigent proxy"
+    fi
+  done
   mkt_html=$(curl -s "$MARKETING/" -A "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" | head -c 800)
   if echo "$mkt_html" | grep -q "bg-spin-600"; then
-    pass "Googlebot on spinapp.site/ gets marketing HTML"
+    pass "Googlebot on spinapp.site/ → marketing HTML"
   else
     fail "Googlebot on spinapp.site/ did not get marketing HTML"
   fi

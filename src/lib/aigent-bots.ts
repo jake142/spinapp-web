@@ -4,9 +4,13 @@ const SEARCH_INDEXER_PATTERNS = [/Googlebot/i, /bingbot/i];
 /** AI crawlers — receive proxied Aigent content on spinapp.site (no redirect). */
 const AI_ROUTER_PATTERNS = [
   /Google-Extended/i,
+  /^Google$/i,
+  /Google-Agent/i,
   /GPTBot/i,
   /ChatGPT-User/i,
+  /OAI-SearchBot/i,
   /ClaudeBot/i,
+  /Claude-Web/i,
   /anthropic-ai/i,
   /PerplexityBot/i,
 ];
@@ -14,15 +18,11 @@ const AI_ROUTER_PATTERNS = [
 export function isBotSplitEnabled(): boolean {
   const flag = import.meta.env.AIGENT_BOT_SPLIT;
 
-  if (typeof flag !== 'string' || flag.length === 0) {
-    return true;
-  }
-
-  if (['0', 'false', 'no', 'off'].includes(flag.toLowerCase())) {
+  if (typeof flag === 'string' && ['0', 'false', 'no', 'off'].includes(flag.toLowerCase())) {
     return false;
   }
 
-  return ['1', 'true', 'yes', 'on', 'ai-only'].includes(flag.toLowerCase());
+  return true;
 }
 
 export function isSearchIndexerBot(userAgent: string): boolean {
