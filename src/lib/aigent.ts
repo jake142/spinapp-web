@@ -31,8 +31,13 @@ export function shouldProxyToAigent(pathname: string, host: string): boolean {
     return !pathname.startsWith('/_astro/');
   }
 
-  // Main marketing site — brief llms files only on root domain.
-  return pathname === '/llms.txt' || pathname === '/llms-full.txt';
+  // Main marketing site — llms + discovery files; ai.* is fully proxied above.
+  return (
+    pathname === '/llms.txt' ||
+    pathname === '/llms-full.txt' ||
+    pathname === '/robots.txt' ||
+    pathname === '/sitemap.xml'
+  );
 }
 
 /** Proxy Aigent AI endpoints — path preserved, URL stays on spinapp.site / ai.spinapp.site. */
