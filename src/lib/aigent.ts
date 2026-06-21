@@ -112,6 +112,13 @@ export async function proxyAigent(request: Request): Promise<Response> {
       responseHeaders.set('Cache-Control', 'public, max-age=300, must-revalidate');
       responseHeaders.set('CDN-Cache-Control', 'max-age=300');
     }
+  } else if (
+    incoming.pathname === '/robots.txt' ||
+    incoming.pathname === '/sitemap.xml'
+  ) {
+    responseHeaders.delete('etag');
+    responseHeaders.set('Cache-Control', 'no-store');
+    responseHeaders.set('CDN-Cache-Control', 'no-store');
   }
 
   return new Response(upstream.body, {
