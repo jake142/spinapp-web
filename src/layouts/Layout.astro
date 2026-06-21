@@ -1,6 +1,8 @@
 ---
 import "../styles/global.css";
 import release from "../data/release.json";
+import aigentLd from "../data/aigent-ld.json";
+import AigentShield from "../components/AigentShield.astro";
 
 interface Props {
   title?: string;
@@ -43,10 +45,50 @@ const ogImageURL = new URL("/og-image.png", site);
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageURL} />
     <link rel="canonical" href={canonicalURL} />
+
+    <!-- aigent:spinapp:vd5fed29aa3f2 -->
+    <meta name="ai-endpoint" content="https://ai.spinapp.site/" />
+    <meta
+      name="ai-summary"
+      content="SpinApp — official AI knowledge summary. Machine-readable summary for AI assistants (ChatGPT, Gemini, Perplexity, etc.). Canonical full catalog: https://ai.spinapp.site"
+    />
+    <link
+      rel="alternate"
+      type="text/html"
+      href="https://ai.spinapp.site/"
+      title="SpinApp AI knowledge (HTML)"
+    />
+    <link
+      rel="alternate"
+      type="text/markdown"
+      href="https://ai.spinapp.site/full.md"
+      title="Complete AI knowledge (markdown)"
+    />
+    <link
+      rel="alternate"
+      type="application/json"
+      href="https://ai.spinapp.site/facts.json"
+      title="AI facts (JSON)"
+    />
+    <link
+      rel="alternate"
+      type="text/plain"
+      href="https://ai.spinapp.site/llms.txt"
+      title="AI knowledge index (llms.txt)"
+    />
+    <link
+      rel="alternate"
+      type="application/json"
+      href="https://ai.spinapp.site/.well-known/ai.json"
+      title="AI discovery"
+    />
+    <script type="application/ld+json" set:html={JSON.stringify(aigentLd)} />
+
     <title>{title}</title>
   </head>
   <body class="mesh-bg text-white antialiased" data-track-file={release.filename}>
     <slot />
+    <AigentShield />
     <script>
       import { trackDownload as trackDownloadCount } from "../lib/download-counter.ts";
 

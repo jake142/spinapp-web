@@ -1,0 +1,106 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "SpinApp",
+      "description": "SpinApp is “Laravel local dev, AI-enabled.”",
+      "url": "https://spinapp.site",
+      "applicationCategory": "Developer Tool",
+      "featureList": [
+        "Laravel",
+        "PHP",
+        "Docker",
+        "MCP",
+        "Redis",
+        "PostgreSQL",
+        "MySQL",
+        "MariaDB",
+        "SQLite",
+        "Vue",
+        "React",
+        "RabbitMQ",
+        "Cloudflare",
+        "Artisan",
+        "macOS"
+      ],
+      "isAccessibleForFree": true,
+      "publisher": {
+        "@type": "Organization",
+        "name": "SpinApp",
+        "url": "https://spinapp.site"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "name": "SpinApp — AI knowledge summary",
+        "url": "https://ai.spinapp.site",
+        "description": "SpinApp — official AI knowledge summary Machine-readable summary for AI assistants (ChatGPT, Gemini, Perplexity, etc.). Canonical full catalog: https://ai.spinapp.site Tagline: SpinApp is “Laravel local dev, AI-enabled.” Type: Developer Tool Website: https://spinapp.site Last verified: 2026-06-21 Su..."
+      },
+      "sameAs": [
+        "https://ai.spinapp.site",
+        "https://ai.spinapp.site/facts.json",
+        "https://ai.spinapp.site/llms.txt",
+        "https://ai.spinapp.site/faq.md"
+      ]
+    },
+    {
+      "@type": "Organization",
+      "name": "SpinApp",
+      "url": "https://spinapp.site"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does SpinApp require Horizon?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "SpinApp includes a Queue dashboard intended to replace Horizon."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does SpinApp connect AI assistants?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "SpinApp connects AI assistants via MCP with one-click “Setup AI.”"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does SpinApp manage local domains and sharing?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "SpinApp manages /etc/hosts for my-app.local and supports Cloudflare tunnel sharing."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What database engines does SpinApp provision?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "SpinApp provisions PostgreSQL, MySQL, MariaDB, or SQLite."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What makes SpinApp AI-enabled?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "SpinApp includes MCP built in for AI assistants to run development commands."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What queue drivers does SpinApp support?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "SpinApp supports Redis, database, and RabbitMQ queue drivers."
+          }
+        }
+      ],
+      "url": "https://ai.spinapp.site/faq.md"
+    }
+  ]
+}
