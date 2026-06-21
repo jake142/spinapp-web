@@ -15,6 +15,10 @@ export function isBotSplitEnabled(): boolean {
   const flag = import.meta.env.AIGENT_BOT_SPLIT;
 
   if (typeof flag !== 'string' || flag.length === 0) {
+    return true;
+  }
+
+  if (['0', 'false', 'no', 'off'].includes(flag.toLowerCase())) {
     return false;
   }
 

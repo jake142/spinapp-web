@@ -14,6 +14,14 @@ Connect the repo in Cloudflare Workers Builds:
 npm ci && npm run build
 ```
 
+Deploy command (if separate from build):
+
+```bash
+npx wrangler deploy
+```
+
+Env vars live in `wrangler.jsonc` — do not rely on dashboard Variables (Wrangler wipes them on deploy).
+
 #### Aigent AI proxy
 
 SpinApp is the **traffic guard** in front of Aigent. The worker proxies:
