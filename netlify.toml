@@ -20,3 +20,16 @@
   from = "/download"
   to = "/.netlify/functions/track-download"
   status = 200
+
+# Fallback if deployed to Netlify (prod uses Cloudflare middleware)
+[[redirects]]
+  from = "/llms.txt"
+  to = "https://spinapp.aigent.host/llms.txt"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/llms-full.txt"
+  to = "https://spinapp.aigent.host/llms-full.txt"
+  status = 200
+  force = true

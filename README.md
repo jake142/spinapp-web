@@ -16,27 +16,43 @@ npm ci && npm run build
 
 #### Aigent AI proxy
 
-This site proxies AI content from Aigent to `ai.spinapp.site` and `/llms.txt` on the root domain.
+SpinApp is the **traffic guard** in front of Aigent. The worker proxies:
 
-**DNS** — CNAME `ai` → `spinapp.site`, proxied (orange).
+| Host | What gets proxied |
+|------|-------------------|
+| `spinapp.site` | `/llms.txt`, `/llms-full.txt` only |
+| `ai.spinapp.site` | **Everything** except `/_astro/*` |
 
-**Worker route** — Domains → Add Route `*.spinapp.site/*` (or `ai.spinapp.site/*`). Custom Domain UI often fails; route works.
+Upstream origin: `https://spinapp.aigent.host` (not `ai.spinapp.site` — that loops).
 
-**Env var** — Workers → Settings → Variables:
+**Your checklist (SpinApp / Cloudflare):**
 
+1. **DNS** — `ai` CNAME → `spinapp.site`, **proxied (orange cloud)**
+2. **Worker route** — `*.spinapp.site/*` or `ai.spinapp.site/*` on the Workers project
+3. **Env var** — `AIGENT_ORIGIN_URL` = `https://spinapp.aigent.host`
+4. **Deploy** — push to `main`, wait for Workers build
+5. **One-time purge** — Caching → Custom Purge → `https://ai.spinapp.site/robots.txt`
+
+**Test:**
+
+```bash
+./scripts/test-aigent-proxy.sh
 ```
-AIGENT_ORIGIN_URL = https://spinapp.aigent.host
+
+Or manually:
+
+```bash
+curl -sI https://spinapp.site/llms.txt        # 200
+curl -sI https://ai.spinapp.site/faq.md       # 200
+curl -sI https://ai.spinapp.site/facts.json   # 200
+curl -s  https://ai.spinapp.site/robots.txt   # must include GPTBot
 ```
 
-Not `https://ai.spinapp.site` — that loops.
-
-**Code** — `src/lib/aigent.ts` + `src/middleware.ts` (already in repo). Redeploy after changes.
-
-Test: `https://ai.spinapp.site/llms.txt` and `https://spinapp.site/llms.txt` should return 200.
+**Code:** `src/lib/aigent.ts` + `src/middleware.ts` + head tags in `Layout.astro`.
 
 ### Netlify (optional)
 
-Netlify Functions in `netlify/` are kept as a local-dev fallback. You can also deploy the full site to Netlify via GitHub Actions (`NETLIFY_AUTH_TOKEN`, `NETLIFY_SITE_ID` secrets).
+Netlify Functions in `netlify/` are kept as a local-dev fallback. `netlify.toml` includes llms.txt proxy redirects if you deploy there instead of Cloudflare.
 
 ### Local dev
 
