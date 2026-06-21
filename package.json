@@ -11,17 +11,24 @@
     "dev": "astro dev",
     "dev:netlify": "netlify dev",
     "build": "astro build",
-    "preview": "astro preview",
-    "deploy": "npm run build && wrangler deploy --config dist/server/wrangler.json",
+    "preview": "npm run build && wrangler dev",
+    "deploy": "npm run build && wrangler deploy",
     "deploy:netlify": "npm run build && netlify deploy --prod",
     "astro": "astro",
-    "sync-release": "node scripts/sync-release.mjs"
+    "sync-release": "node scripts/sync-release.mjs",
+    "generate-types": "wrangler types"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^13.0.0",
+    "@astrojs/cloudflare": "^13.7.0",
     "@netlify/blobs": "^10.0.0",
     "@tailwindcss/vite": "^4.3.1",
     "astro": "^6.4.7",
     "tailwindcss": "^4.3.1"
+  },
+  "devDependencies": {
+    "wrangler": "^4.103.0"
+  },
+  "overrides": {
+    "vite": "^7"
   }
 }
