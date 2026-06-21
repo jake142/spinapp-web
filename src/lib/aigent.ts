@@ -1,4 +1,4 @@
-import { isAiRouterBot, isBotSplitEnabled, isSearchIndexerBot } from './aigent-bots';
+import { isAiCrawler, isBotSplitEnabled, isSearchIndexerBot } from './aigent-bots';
 
 const DEFAULT_AIGENT_ORIGIN = 'https://spinapp.aigent.host';
 
@@ -47,6 +47,7 @@ export function shouldProxyToAigent(
   pathname: string,
   host: string,
   userAgent?: string | null,
+  signatureAgent?: string | null,
 ): boolean {
   if (isAiSubdomain(host)) {
     return !isWorkerStaticPath(pathname);
@@ -58,9 +59,8 @@ export function shouldProxyToAigent(
 
   if (
     isBotSplitEnabled() &&
-    userAgent &&
-    !isSearchIndexerBot(userAgent) &&
-    isAiRouterBot(userAgent)
+    !isSearchIndexerBot(userAgent ?? '') &&
+    isAiCrawler(userAgent, signatureAgent)
   ) {
     return !isWorkerStaticPath(pathname);
   }

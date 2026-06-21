@@ -4,7 +4,7 @@ const SEARCH_INDEXER_PATTERNS = [/Googlebot/i, /bingbot/i, /DuckDuckBot/i];
 /** AI crawlers — receive proxied Aigent content on spinapp.site (no redirect). */
 const AI_ROUTER_PATTERNS = [
   /Google-Extended/i,
-  /^Google$/i,
+  /^Google$/i, // Gemini user-triggered fetch (bare UA)
   /Google-Agent/i,
   /GPTBot/i,
   /ChatGPT-User/i,
@@ -37,6 +37,10 @@ const AI_ROUTER_PATTERNS = [
   /Cursor/i,
 ];
 
+export function isGeminiWebBotAuth(signatureAgent?: string | null): boolean {
+  return (signatureAgent ?? '').toLowerCase().includes('agent.bot.goog');
+}
+
 export function isBotSplitEnabled(): boolean {
   const flag = import.meta.env.AIGENT_BOT_SPLIT;
 
@@ -53,4 +57,16 @@ export function isSearchIndexerBot(userAgent: string): boolean {
 
 export function isAiRouterBot(userAgent: string): boolean {
   return AI_ROUTER_PATTERNS.some((pattern) => pattern.test(userAgent));
+}
+
+/** User-Agent and/or Web Bot Auth Signature-Agent (Gemini). */
+export function isAiCrawler(
+  userAgent?: string | null,
+  signatureAgent?: string | null,
+): boolean {
+  if (isGeminiWebBotAuth(signatureAgent)) {
+    return true;
+  }
+
+  return userAgent ? isAiRouterBot(userAgent) : false;
 }

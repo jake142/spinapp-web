@@ -23,7 +23,14 @@ export const onRequest = defineMiddleware(async (context, next) => {
     });
   }
 
-  if (shouldProxyToAigent(url.pathname, host, context.request.headers.get('User-Agent'))) {
+  if (
+    shouldProxyToAigent(
+      url.pathname,
+      host,
+      context.request.headers.get('User-Agent'),
+      context.request.headers.get('Signature-Agent'),
+    )
+  ) {
     return proxyAigent(context.request);
   }
 

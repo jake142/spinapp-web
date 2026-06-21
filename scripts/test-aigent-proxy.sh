@@ -48,7 +48,7 @@ fi
 if [[ "${BOT_SPLIT_TEST:-0}" == "1" ]]; then
   echo ""
   echo "=== Bot-split ==="
-  for ua in "GPTBot/1.0" "Google" "Google-Extended"; do
+  for ua in "GPTBot/1.0" "Google" "Google-Extended" "Mozilla/5.0 (compatible; Google-Agent)"; do
     ai_headers=$(curl -sI "$MARKETING/" -A "$ua")
     if echo "$ai_headers" | grep -qi "x-aigent-managed"; then
       pass "$ua on spinapp.site/ → Aigent proxy"
@@ -56,6 +56,12 @@ if [[ "${BOT_SPLIT_TEST:-0}" == "1" ]]; then
       fail "$ua on spinapp.site/ did not get Aigent proxy"
     fi
   done
+  google_ai=$(curl -sI "$AI/t/company-overview.md" -A "Google" | head -1)
+  if echo "$google_ai" | grep -q "200"; then
+    pass "Google UA on ai.spinapp.site topic → 200"
+  else
+    fail "Google UA on ai.spinapp.site topic → $google_ai"
+  fi
   mkt_html=$(curl -s "$MARKETING/" -A "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" | head -c 800)
   if echo "$mkt_html" | grep -q "bg-spin-600"; then
     pass "Googlebot on spinapp.site/ → marketing HTML"
