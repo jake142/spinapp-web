@@ -8,6 +8,7 @@ const AI_ROUTER_PATTERNS = [
   /^Google$/i,
   /Google-Agent/i,
   /GPTBot/i,
+  /Meta-WebIndexer/i,
 ];
 
 function isGeminiWebBotAuth(signatureAgent) {
@@ -42,5 +43,10 @@ assert.equal(
 );
 assert.equal(isSearchIndexerBot('Mozilla/5.0 (compatible; Googlebot/2.1)'), true);
 assert.equal(isAiCrawler('Mozilla/5.0 Chrome/120.0', null), false);
+assert.equal(
+  isAiCrawler('meta-webindexer/1.1 (+https://developers.facebook.com/docs/sharing/webmasters/crawler)', null),
+  true,
+  'Meta-WebIndexer',
+);
 
 console.log('aigent-bots checks OK');
