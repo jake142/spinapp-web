@@ -6,7 +6,6 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const releaseDir = resolve(__dirname, "../../spinapp/release");
 const downloadsDir = resolve(__dirname, "../public/downloads");
 const outFile = resolve(__dirname, "../src/data/release.json");
-const GITHUB_REPO = process.env.SPINAPP_GITHUB_REPO ?? "jake142/spinapp";
 
 function parseDmg(filename) {
   const match = filename.match(/^SpinApp_(\d+\.\d+\.\d+)_(aarch64|x64)\.dmg$/);
@@ -90,7 +89,7 @@ const data = {
   filename: latest.filename,
   dmgUrl: `/downloads/${latest.filename}`,
   downloadUrl: `/downloads/${latest.filename}`,
-  githubUrl: `https://github.com/${GITHUB_REPO}`,
+  githubUrl: "https://github.com/jake142",
 };
 
 mkdirSync(dirname(outFile), { recursive: true });
