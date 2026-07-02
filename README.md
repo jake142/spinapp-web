@@ -23,27 +23,19 @@ SpinApp is the **traffic guard** in front of Aigent. The worker proxies:
 
 | Host | What gets proxied |
 |------|-------------------|
-| `spinapp.site` | `/llms.txt`, `/llms-full.txt`, `/robots.txt`, `/sitemap.xml`; bot-split also **all paths** for AI crawlers |
+| `spinapp.site` | `/llms.txt`, `/llms-full.txt`, `/robots.txt`, `/sitemap.xml` only |
 | `ai.spinapp.site` | **Everything** except `/_astro/*` |
+
+All other traffic on `spinapp.site` — including AI crawlers — gets the marketing site. Use `ai.spinapp.site` for the full AI knowledge catalog.
 
 Upstream origin: `https://spinapp.aigent.host` (override via `AIGENT_ORIGIN_URL` if needed).
 
 **DNS:** `ai` CNAME → `spinapp.site`, proxied (orange cloud). Worker route: `*.spinapp.site/*`.
 
-#### Bot-split (always on)
-
-AI crawlers on **`spinapp.site`** get proxied Aigent HTML (same URL, no redirect). Search indexers see the marketing site.
-
-| User-Agent | `spinapp.site` |
-|------------|----------------|
-| `Googlebot`, `Bingbot`, `DuckDuckBot` | Marketing site |
-| `Google`, `Google-Agent`, `Google-Extended`, `GPTBot`, `ChatGPT-User`, `OAI-SearchBot`, `ClaudeBot`, `Claude-User`, `anthropic-ai`, `PerplexityBot`, `Perplexity-User`, `xAI-SearchBot`, `GrokBot`, `DeepSeekBot`, `Applebot-Extended`, `Meta-ExternalAgent`, `Meta-WebIndexer`, `Meta-ExternalAds`, `Meta-ExternalFetcher`, `FacebookExternalHit`, `Bytespider`, `CCBot`, `Amazonbot`, `YouBot`, `DuckAssistBot`, `Cohere-AI`, `PetalBot`, `GitHub-Copilot`, `Cursor` | Aigent proxy |
-
 **Test:**
 
 ```bash
 ./scripts/test-aigent-proxy.sh
-BOT_SPLIT_TEST=1 ./scripts/test-aigent-proxy.sh
 ```
 
 ### Netlify (optional)

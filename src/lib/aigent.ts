@@ -1,5 +1,3 @@
-import { isAiCrawler, isBotSplitEnabled, isSearchIndexerBot } from './aigent-bots';
-
 const DEFAULT_AIGENT_ORIGIN = 'https://spinapp.aigent.host';
 
 const DISCOVERY_FILES = new Set([
@@ -43,29 +41,12 @@ function isWorkerStaticPath(pathname: string): boolean {
   return pathname.startsWith('/_astro/');
 }
 
-export function shouldProxyToAigent(
-  pathname: string,
-  host: string,
-  userAgent?: string | null,
-  signatureAgent?: string | null,
-): boolean {
+export function shouldProxyToAigent(pathname: string, host: string): boolean {
   if (isAiSubdomain(host)) {
     return !isWorkerStaticPath(pathname);
   }
 
-  if (isDiscoveryFile(pathname)) {
-    return true;
-  }
-
-  if (
-    isBotSplitEnabled() &&
-    !isSearchIndexerBot(userAgent ?? '') &&
-    isAiCrawler(userAgent, signatureAgent)
-  ) {
-    return !isWorkerStaticPath(pathname);
-  }
-
-  return false;
+  return isDiscoveryFile(pathname);
 }
 
 /** Proxy Aigent AI endpoints — path preserved, URL stays on spinapp.site / ai.spinapp.site. */
@@ -131,9 +112,6 @@ export async function proxyAigent(request: Request): Promise<Response> {
   }
 
   const pathname = incoming.pathname;
-  const onMarketingRoot = !isAiSubdomain(incoming.hostname);
-  const botSplitRoute =
-    onMarketingRoot && isBotSplitEnabled() && isDiscoveryFile(pathname) === false;
 
   if (isAiSubdomain(incoming.hostname)) {
     responseHeaders.delete('etag');
@@ -148,11 +126,6 @@ export async function proxyAigent(request: Request): Promise<Response> {
   } else if (pathname === '/robots.txt' || pathname === '/sitemap.xml') {
     responseHeaders.delete('etag');
     responseHeaders.set('Cache-Control', 'no-store');
-    responseHeaders.set('CDN-Cache-Control', 'no-store');
-  } else if (botSplitRoute) {
-    responseHeaders.delete('etag');
-    responseHeaders.set('Vary', 'User-Agent');
-    responseHeaders.set('Cache-Control', 'private, no-store');
     responseHeaders.set('CDN-Cache-Control', 'no-store');
   }
 
